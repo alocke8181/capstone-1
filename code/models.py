@@ -17,7 +17,7 @@ class User(db.Model):
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.Text, nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
-    pic_url = db.Column(db.Text)
+    pic_url = db.Column(db.Text, default='/static/default-user-icon.png')
     favorites = db.relationship('Palette', secondary='favorites', backref='users')
     palettes = db.relationship('Palette', secondary='users-palettes', backref='users')
 

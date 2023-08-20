@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
+    <title>Palette Place</title>
+</head>
+<body>
+    <section id="header">
+        <div>
+            <h1>Palette Place</h1> 
+            <h3>Search</h3>
+            {% if session['CURR_USER'] %}
+                <h4><a href="/users/{{session['CURR_USER']}}">Profile</a> | <a href='/users/logout'>Logout</a></h4>
+            {% else %}
+                <h4><a href='/users/login/'>Login</a></h4>
+            {% endif %}
+        </div>
+        <hr>
+    </section>
+    {% block content %}
+    {% endblock %}
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://unpkg.com/axios/dist/axios.js"></script>
+</body>
+</html>
