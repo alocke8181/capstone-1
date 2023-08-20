@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from datetime import datetime
 
 
 db = SQLAlchemy()
@@ -18,8 +19,9 @@ class User(db.Model):
     password = db.Column(db.Text, nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
     pic_url = db.Column(db.Text, default='/static/default-user-icon.png')
-    favorites = db.relationship('Palette', secondary='favorites', backref='users')
-    palettes = db.relationship('Palette', secondary='users-palettes', backref='users')
+    desc = db.Column(db.String(300), default='No description.')
+    favorites = db.relationship('Palette', secondary='favorites', backref='favorited_by')
+    palettes = db.relationship('Palette', secondary='users_palettes', backref='user')
 
     @classmethod
     def register(cls, username, password, email, pic_url):
@@ -30,7 +32,8 @@ class User(db.Model):
             username = username,
             password = hashed_pw,
             email = email,
-            pic_url = pic_url)
+            pic_url = pic_url
+            )
         db.session.add(user)
         return user
 
@@ -51,13 +54,14 @@ class Palette(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(20), nullable=False)
-    desc = db.Column(db.String(200))
+    desc = db.Column(db.String(200), default='No description.')
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
+    tags = db.relationship('Tag', secondary='palettes_tags', backref='palettes_tagged')
     main = db.Column(db.Text, nullable=False)
     light_c = db.Column(db.Text, nullable=False)
     light_a = db.Column(db.Text, nullable=False)
     dark_c = db.Column(db.Text, nullable=False)
     dark_a = db.Column(db.Text, nullable=False)
-    user = db.relationship('User')
 #####################################################################################
 class Tag(db.Model):
     """Tag"""
@@ -77,7 +81,7 @@ class Favorite(db.Model):
 class User_Palette(db.Model):
     """User_Palette
     Connecting table betweeen users and palettes for their own palettes"""
-    __tablename__ = 'users-palettes'
+    __tablename__ = 'users_palettes'
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'), primary_key=True)
     palette_id = db.Column(db.Integer, db.ForeignKey('palettes.id', ondelete='cascade'), primary_key=True)
@@ -85,7 +89,7 @@ class User_Palette(db.Model):
 class Palette_Tag(db.Model):
     """Palette_Tag
     Connecting table betweeen palettes and tags"""
-    __tablename__ = 'palettes-tags'
+    __tablename__ = 'palettes_tags'
 
     palette_id = db.Column(db.Integer, db.ForeignKey('palettes.id', ondelete='cascade'), primary_key=True)
     tag_id = db.Column(db.Integer, db.ForeignKey('tags.id', ondelete='cascade'), primary_key=True)

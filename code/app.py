@@ -3,12 +3,13 @@ from flask_debugtoolbar import DebugToolbarExtension
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from models import db, connect_db, User, Palette, Tag
-from forms import RegisterForm
+from forms import RegisterForm, LoginForm
 from sqlalchemy.exc import IntegrityError
 
 bcrypt = Bcrypt()
 
 CURR_USER = 'curr_user'
+DEFAULT_PIC = '/static/default-user-icon.png'
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///capstone1'
@@ -24,7 +25,8 @@ connect_db(app)
 
 @app.route('/')
 def show_home():
-    """Show the home page"""
+    """Show the home page with the 10 most recently created palettes"""
+    palettes = Palette.query.order_by(Palette.date_created.desc()).limit(10).all()
     return render_template('home.html')
 
 #####################################################################################
@@ -45,16 +47,18 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         try:
-            user = User.signup(
+            user = User.register(
                 username = form.username.data,
                 password = form.password.data,
                 email = form.email.data,
-                pic_url = form.pic_url.data or User.pic_url.default.arg)
+                pic_url = form.pic_url.data or DEFAULT_PIC)
+            db.session.commit()
         except IntegrityError:
             flash('Username already taken','error')
             return render_template('users/register.html', form=form)
         login_user(user)
         return redirect(f'/users/{user.id}')
+    return render_template('users/register.html', form=form)
 
 @app.route('/users/login', methods=['GET','POST'])
 def login():
@@ -77,6 +81,13 @@ def logout():
     flash('Logout successful.','good')
     return redirect('/')
 
+#####################################################################################
+#View, Edit, and Delete user profiles
+
+@app.route('/users/<int:user_id>')
+def view_profile(user_id):
+    user = User.query.get_or_404(user_id)
+    return render_template('users/profile.html', user=user)
 
 #####################################################################################
 #Helper functions
@@ -106,7 +117,20 @@ def login_user(user):
     """Login the user"""
     session[CURR_USER] = user.id
 
-def logout_user(user):
+def logout_user():
     """Logout the user"""
     if CURR_USER in session:
         del session[CURR_USER]
+
+#####################################################################################
+#Error routes
+
+@app.errorhandler(404)
+def page_not_found(e):
+    """Handle 404 errors"""
+    return render_template('errors/404.html',error=e), 404
+
+# @app.errorhandler(500)
+# def int_server_error(e):
+#     """Handle 500 errors"""
+#     return render_template('errors/500.html',error=e), 500

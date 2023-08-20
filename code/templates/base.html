@@ -4,19 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="static/stylesheets/base.css">
     <title>Palette Place</title>
 </head>
 <body>
     <section id="header">
-        <div>
-            <h1>Palette Place</h1> 
-            <h3>Search</h3>
-            {% if session['CURR_USER'] %}
-                <h4><a href="/users/{{session['CURR_USER']}}">Profile</a> | <a href='/users/logout'>Logout</a></h4>
+        <ul id="header-links">
+            <li>
+                <a id='home-link' href='/'>Palette Place</a>
+            </li>
+            <li> 
+                <a id='search-link' href="/palettes/search">Search</a>
+            </li>
+            {% if g.user %}
+                <li>
+                    <a class="other-links" href="/users/{{g.user.id}}">Profile</a>
+                </li>
+                <li>
+                    <a class="other-links" href='/users/logout'>Logout</a>
+                </li>
             {% else %}
-                <h4><a href='/users/login/'>Login</a></h4>
+                <li>
+                    <a class="other-links" href='/users/login'>Login</a>
+                </li>
+                <li>
+                    <a class="other-links" href='/users/register'>Register</a>
+                </li>
             {% endif %}
-        </div>
+        </ul>
+        <br class="break">
         <hr>
     </section>
     {% block content %}
