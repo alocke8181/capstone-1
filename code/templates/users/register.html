@@ -2,6 +2,7 @@
 {% block content %}
 <div id="register-div">
     <form id="register-form" method="POST">
+        <p>Your username cannot be changed</p>
         {{ form.hidden_tag() }}
         {% for field in form if field.widget.input_type != 'hidden' %}
             {% for error in field.errors %}

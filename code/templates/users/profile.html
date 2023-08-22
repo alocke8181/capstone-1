@@ -1,14 +1,16 @@
 {% extends 'base.html' %}
+
 {% block content %}
-    <section id="profile-info">
-        <div id="profile-div">
-            <img src="{{ user.pic_url }}" id="profile-pic" style="width: 200px; height: 200px;">
-            <h5>{{ user.username }}</h5>
-            <p>{{ user.desc }}</p>
-        </div>
-    </section>
+    <div id="profile-div">
+        <img src="{{ user.pic_url }}" id="profile-pic" style="width: 200px; height: 200px;">
+        <h5>{{ user.username }}</h5>
+        <p>{{ user.desc }}</p>
+        {% if g.user.id == user.id %}
+            <a href="/users/{{user.id}}/edit">Edit Profile</a>
+        {% endif %}
+    </div>
     <hr>
-    <section id="user-palettes">
+    <div id="user-palettes">
         <h5>Palettes</h5>
         <!-- VSCode will think the inline styles will cause errors. They won't.-->
         {% if palettes|length > 0 %}
@@ -27,9 +29,9 @@
         {% else %}
             <p>{{user.username}} hasn't made any palettes yet!</p>
         {% endif %}
-    </section>
+        </div>
     <hr>
-    <section id="user-favorites">
+    <div id="user-favorites">
         <h5>Favorites</h5>
         <!-- VSCode will think the inline styles will cause errors. They won't.-->
         {% if palettes|length > 0 %}
@@ -48,5 +50,5 @@
         {% else %}
         <p>{{user.username}} hasn't favorited any palettes yet!</p>
         {% endif %}
-    </section>
+        </div>
 {% endblock %}

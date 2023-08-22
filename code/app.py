@@ -1,9 +1,9 @@
-from flask import Flask, request, render_template, redirect, flash, session, g
+from flask import Flask, request, render_template, redirect, flash, session, g, abort
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from models import db, connect_db, User, Palette, Tag
-from forms import RegisterForm, LoginForm
+from forms import RegisterForm, LoginForm, UserEditForm
 from sqlalchemy.exc import IntegrityError
 
 bcrypt = Bcrypt()
@@ -86,8 +86,31 @@ def logout():
 
 @app.route('/users/<int:user_id>')
 def view_profile(user_id):
+    """View a user's profile"""
     user = User.query.get_or_404(user_id)
     return render_template('users/profile.html', user=user)
+
+@app.route('/users/<int:user_id>/edit', methods=['GET','POST'])
+def edit_profile(user_id):
+    """Authorize and allow edits of a user's profile.
+    Returns 403 if they are not authorized."""
+    if not g.user or session[CURR_USER] != user_id:
+        abort(403)
+
+    form = UserEditForm(obj=g.user)
+    if form.validate_on_submit():
+        if User.authenticate(g.user.username, form.password.data):
+            g.user.desc = form.desc.data
+            g.user.email = form.email.data
+            g.user.pic_url = form.pic_url.data
+            db.session.add(g.user)
+            db.session.commit()
+            return redirect(f'/users/{g.user.id}')
+        else:
+            flash('Invalid Password','danger')
+            return redirect(f'/users/{user_id}/edit')
+    else:
+        return render_template('users/edit.html',form=form)
 
 #####################################################################################
 #Helper functions
@@ -129,6 +152,11 @@ def logout_user():
 def page_not_found(e):
     """Handle 404 errors"""
     return render_template('errors/404.html',error=e), 404
+
+@app.errorhandler(403)
+def forbidden_access(e):
+    "Handle 403 errors"
+    return render_template('errors/403.html',error=e), 403
 
 # @app.errorhandler(500)
 # def int_server_error(e):
