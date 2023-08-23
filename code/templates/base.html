@@ -18,6 +18,9 @@
             </li>
             {% if g.user %}
                 <li>
+                    <a class="other-links" href="/palettes/new">Create</a>
+                </li>
+                <li>
                     <a class="other-links" href="/users/{{g.user.id}}">Profile</a>
                 </li>
                 <li>
@@ -44,5 +47,7 @@
     {% endblock %}
     <script src="https://unpkg.com/jquery"></script>
     <script src="https://unpkg.com/axios/dist/axios.js"></script>
+    {% block scripts %}
+    {% endblock %}
 </body>
 </html>

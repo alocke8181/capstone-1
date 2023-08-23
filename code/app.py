@@ -1,15 +1,17 @@
-from flask import Flask, request, render_template, redirect, flash, session, g, abort
+from flask import Flask, request, render_template, redirect, flash, session, g, abort, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from models import db, connect_db, User, Palette, Tag
 from forms import RegisterForm, LoginForm, UserEditForm
 from sqlalchemy.exc import IntegrityError
+import requests
 
 bcrypt = Bcrypt()
 
 CURR_USER = 'curr_user'
 DEFAULT_PIC = '/static/default-user-icon.png'
+BASE_URL = 'http://colormind.io/api/'
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///capstone1'
@@ -113,6 +115,19 @@ def edit_profile(user_id):
         return render_template('users/edit.html',form=form)
 
 #####################################################################################
+#Create, Edit, and Delete Palettes
+
+@app.route('/palettes/new', methods=['GET'])
+def show_palette_maker():
+    """Show the palette creator page.
+    It is pre-populated with colors on load."""
+    first_response = requests.post(BASE_URL, json={'model' : 'default'})
+    first_colors = first_response.json()['result']
+    first_colors = process_colors(first_colors)
+    return render_template('palettes/create.html', colors=first_colors)
+
+
+#####################################################################################
 #Helper functions
 def generate_tags():
     """Helper function to pre-generate all of the tags.
@@ -145,6 +160,22 @@ def logout_user():
     if CURR_USER in session:
         del session[CURR_USER]
 
+def process_colors(colors):
+    """Re-orders the colors from the API, converts them to HEX, and returns them as a dictionary
+    LC, LA, M, DA, DC --> M, LC, LA, DC, DA"""
+    main = f"#{'%02x%02x%02x' % tuple(colors[2])}"
+    light_c = f"#{'%02x%02x%02x' % tuple(colors[0])}"
+    light_a = f"#{'%02x%02x%02x' % tuple(colors[1])}"
+    dark_c = f"#{'%02x%02x%02x' % tuple(colors[4])}"
+    dark_a = f"#{'%02x%02x%02x' % tuple(colors[3])}"
+    processed = {
+        'main' : main,
+        'light_c' : light_c,
+        'light_a' : light_a,
+        'dark_c' : dark_c,
+        'dark_a' : dark_a
+    }
+    return processed
 #####################################################################################
 #Error routes
 

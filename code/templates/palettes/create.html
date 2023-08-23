@@ -1,13 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
-<h5>Create a New Palette</h5>
-<section id="color-section">
+<h3>Create a New Palette</h3>
+<p>Lock colors and the API will generate colors to compliment them!</p>
+<div id="color-section">
     <form>
-        <div class="color-picker" id="main">
-            <div class="color-box" id="main-prev"></div>
-            <input type="checkbox" id="main-lock" name="main-lock">
-            <label for="main-lock">Lock</label>
-        </div>
+        {% for color_key in colors.keys() %}
+            {% set color = colors[color_key] %}
+            <div class="color-picker" id="{{color_key}}">
+                <h4>{{color_key}}</h4>
+                <input type="color" id="{{color_key}}-picker" name="{{color_key}}-color" value="{{color}}">
+                <br>
+                <div class="checkbox-cont">
+                    <input type="checkbox" id="{{color_key}}-lock" name="{{color_key}}-lock">
+                    <label for="{{color_key}}-lock">Lock</label>
+                </div>
+            </div>
+        {% endfor %}
     </form>
-</section>
-{% end block%}
+</div>
+{% endblock %}

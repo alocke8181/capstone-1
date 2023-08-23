@@ -36,3 +36,21 @@ li a{
 .break{
     clear:both;
 }
+
+#color-section{
+    margin: auto;
+    width: 60%;
+}
+
+.color-picker{
+    display: inline-block;
+}
+
+input[type=color]{
+    width: 200px;
+    height: 200px;
+}
+
+.checkbox-cont{
+    text-align: center;
+}
