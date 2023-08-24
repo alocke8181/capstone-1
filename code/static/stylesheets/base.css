@@ -1,15 +1,15 @@
-ul{
+#header-links{
     list-style-type: none;
     margin:0;
     padding:0;
 }
 
-li{
+#header-links li{
     float: left;
     height: 100px;
 }
 
-li a{
+#header-links li a{
     display:block;
     padding: 8px;
     text-decoration: none;
@@ -44,6 +44,7 @@ li a{
 
 .color-picker{
     display: inline-block;
+    border: 2px solid black;
 }
 
 input[type=color]{
@@ -52,5 +53,10 @@ input[type=color]{
 }
 
 .checkbox-cont{
+    text-align: center;
+}
+
+.color-header{
+    width: 200px;
     text-align: center;
 }

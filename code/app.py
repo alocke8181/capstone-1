@@ -121,7 +121,7 @@ def edit_profile(user_id):
 def show_palette_maker():
     """Show the palette creator page.
     It is pre-populated with colors on load."""
-    first_response = requests.post(BASE_URL, json={'model' : 'default'})
+    first_response = requests.post(BASE_URL, json={'model' : 'ui'})
     first_colors = first_response.json()['result']
     first_colors = process_colors(first_colors)
     return render_template('palettes/create.html', colors=first_colors)
