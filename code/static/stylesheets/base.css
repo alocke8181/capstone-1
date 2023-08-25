@@ -60,3 +60,9 @@ input[type=color]{
     width: 200px;
     text-align: center;
 }
+
+#button-div{
+    margin: auto;
+    width: 33%;
+    padding-top: 10px;
+}

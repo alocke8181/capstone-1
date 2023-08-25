@@ -11,16 +11,20 @@
                 <input type="color" id="{{color_key}}-picker" name="{{color_key}}-color" value="{{color}}">
                 <br>
                 <div class="checkbox-cont">
-                    <input type="checkbox" id="{{color_key}}-lock" name="{{color_key}}-lock">
+                    <input type="checkbox" class="lock" id="{{color_key}}-lock" name="{{color_key}}-lock">
                     <label for="{{color_key}}-lock">Lock</label>
                 </div>
             </div>
         {% endfor %}
+        <div id="button-div">
+            <button class="btn btn-primary" id="gen-button">Generate Palette</button>
+            <button class="btn btn-secondary" id="save-button">Save Palette</button>
+        </div>
     </form>
 </div>
 <hr>
 {% endblock %}
 
 {% block scripts %}
-<script src="http://127.0.0.1:5000/static/javascript/create.js"></script>
+<script src="http://127.0.0.1:5000/static/javascript/paletteCreate.js"></script>
 {% endblock %}

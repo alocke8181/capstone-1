@@ -114,6 +114,20 @@ def edit_profile(user_id):
     else:
         return render_template('users/edit.html',form=form)
 
+@app.route('/users/<int:user_id>/delete',methods=['GET'])
+def delete_profile(user_id):
+    """Delete a user's profile.
+    Returns 403 if they are not authorized."""
+
+    if not g.user or session[CURR_USER] != user_id:
+        abort(403)
+
+    user = User.query.get_or_404(user_id)
+    logout_user()
+    db.session.delete(g.user)
+    db.session.commit()
+    return redirect('/')    
+
 #####################################################################################
 #Create, Edit, and Delete Palettes
 
