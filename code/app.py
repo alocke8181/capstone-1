@@ -135,10 +135,23 @@ def delete_profile(user_id):
 def show_palette_maker():
     """Show the palette creator page.
     It is pre-populated with colors on load."""
-    first_response = requests.post(BASE_URL, json={'model' : 'ui'})
+    first_response = requests.post(BASE_URL, json={'model' : 'default'})
+    first_models = requests.get('http://colormind.io/list/')
+    model_list = process_models(first_models.json()['result'])
     first_colors = first_response.json()['result']
-    first_colors = process_colors(first_colors)
-    return render_template('palettes/create.html', colors=first_colors)
+    first_colors = process_colors_out(first_colors)
+    return render_template('palettes/create.html', colors=first_colors, models=model_list)
+
+@app.route('/palettes/generate', methods=['POST'])
+def generate_palette():
+    """Generate a palette based on colors that are locked in."""
+    colors_in = request.json['colors']
+    model = request.json['model']
+    colors_processed = process_colors_in(colors_in)
+    response = requests.post(BASE_URL, json={'model' : model, 'input' : colors_processed})
+    generated_colors = response.json()['result']
+    processed_colors = process_colors_out(generated_colors)
+    return jsonify(colors=processed_colors)
 
 
 #####################################################################################
@@ -174,22 +187,52 @@ def logout_user():
     if CURR_USER in session:
         del session[CURR_USER]
 
-def process_colors(colors):
-    """Re-orders the colors from the API, converts them to HEX, and returns them as a dictionary
-    LC, LA, M, DA, DC --> M, LC, LA, DC, DA"""
-    main = f"#{'%02x%02x%02x' % tuple(colors[2])}"
+def process_colors_in(colors):
+    """Reorders,Converts to RGB, and returns it as a list
+    M,LC,LA,DC,DA->LC,LA,M,DA,DC"""
+    convertedColors = []
+    orderedColors = []
+    for eachColor in colors:
+        if eachColor != "N":
+            eachColor = eachColor.lstrip('#')
+            eachColor = list(int(eachColor[i:i+2],16) for i in (0,2,4))
+            convertedColors.append(eachColor)
+        else:
+            convertedColors.append(eachColor)
+    orderedColors.append(convertedColors[1])
+    orderedColors.append(convertedColors[2])
+    orderedColors.append(convertedColors[0])
+    orderedColors.append(convertedColors[4])
+    orderedColors.append(convertedColors[3])
+    return orderedColors
+
+
+def process_colors_out(colors):
+    """Reorders, converts them to HEX, and returns them as a dictionary
+    LC,LA,M,DA,DC -> M,LC,LA,DC,DA"""
     light_c = f"#{'%02x%02x%02x' % tuple(colors[0])}"
     light_a = f"#{'%02x%02x%02x' % tuple(colors[1])}"
-    dark_c = f"#{'%02x%02x%02x' % tuple(colors[4])}"
+    main = f"#{'%02x%02x%02x' % tuple(colors[2])}"
     dark_a = f"#{'%02x%02x%02x' % tuple(colors[3])}"
+    dark_c = f"#{'%02x%02x%02x' % tuple(colors[4])}"
     processed = {
-        'main' : main,
-        'light_c' : light_c,
-        'light_a' : light_a,
-        'dark_c' : dark_c,
-        'dark_a' : dark_a
+        'main':main,
+        'light_c':light_c,
+        'light_a':light_a,
+        'dark_c':dark_c,
+        'dark_a':dark_a
     }
     return processed
+
+def process_models(models):
+    """Returns a dict with the models
+    process_models(['model_1','model_2'])
+    {'model_1' : 'Model 1', 'model_2' : 'Model 2'}"""
+    processed_models = {}
+    for model in models:
+        model_title = model.replace('_',' ').title()
+        processed_models[model] = model_title
+    return processed_models
 #####################################################################################
 #Error routes
 

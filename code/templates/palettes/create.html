@@ -16,6 +16,14 @@
                 </div>
             </div>
         {% endfor %}
+        <div id="model-div">
+            <label for="model">Choose a model to generate with:</label>
+            <select id="models" name="model">
+                {% for model in models.keys() %}
+                    <option id="{{model}}" value="{{model}}">{{models[model]}}</option>
+                {% endfor %}
+            </select>
+        </div>
         <div id="button-div">
             <button class="btn btn-primary" id="gen-button">Generate Palette</button>
             <button class="btn btn-secondary" id="save-button">Save Palette</button>

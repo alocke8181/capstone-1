@@ -1,35 +1,46 @@
+const BASE_URL = 'http://127.0.0.1:5000/';
+
 function populateColorHeaders(){
     //Helper function to populate the color headers
     let $colorHeaders = $('.color-header');
-    const headerTexts = ['Main Color','Light Color','Light Accent','Dark Color','Dark Accent'];
+    const headerTexts = ['Main','Light Shade','Light Accent','Dark Shade','Dark Accent'];
     for (let i =0; i<5; i++){
         $colorHeaders.get(i).innerText = headerTexts[i];
     }
 }
 populateColorHeaders();
+$('#default').attr('selected','selected');
 
-function generatePalette(){
-    //Gets the lock info and color data and sends it to the server.
-    let sendData = [];
+async function generatePalette(){
+    //Gets the lock info, color data, and model and sends it to the server.
     let $genButton = $('#gen-button');
-    $genButton.click(function(event){
+    $genButton.click(async function(event){
         event.preventDefault();
-        sendData = [];
+        let sendColors = [];
+        let model = $('#models').val();
+        console.log(model);
         let $locks = $('.lock');
-        let index = 0;
+        let i = 0;
         $locks.each(function(){
             if (this.checked){
-                let $colorPicker = $('#color-section').find('input[type=color]')[index];
+                let $colorPicker = $('#color-section').find('input[type=color]')[i];
                 let color = $colorPicker.value;
-                sendData.push(color);
-                index++;
+             sendColors.push(color);
+                i++;
             }
             else{
-                sendData.push("N");
-                index++;
+             sendColors.push("N");
+                i++;
             }
         })
-        console.log(sendData);
+        let recieveData = await axios.post(`${BASE_URL}/palettes/generate`, {colors : sendColors, model : model});
+        let colors = Object.values(recieveData.data.colors).reverse();
+        let j = 0;
+        $locks.each(function(){
+            let $colorPicker = $('#color-section').find('input[type=color]')[j];
+            $colorPicker.value = colors[j];
+            j++;
+        })
     });
 }
 generatePalette();

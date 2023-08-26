@@ -66,3 +66,9 @@ input[type=color]{
     width: 33%;
     padding-top: 10px;
 }
+
+#model-div{
+    margin: auto;
+    width: 40%;
+    padding-top: 10px;
+}
