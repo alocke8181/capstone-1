@@ -2,6 +2,12 @@
 {% block content %}
 <h3>Create a New Palette</h3>
 <p>Pick and lock colors and the API will generate colors to compliment them!</p>
+<p>
+    <ul>
+        <li>Locking too many colors may have the generator keep yielding the same results.</li>
+        <li>Locked colors may change shift with each generation.</li>
+    </ul>
+</p>
 <div id="color-section">
     <form>
         {% for color_key in colors.keys() %}
@@ -27,6 +33,24 @@
         <div id="button-div">
             <button class="btn btn-primary" id="gen-button">Generate Palette</button>
             <button class="btn btn-secondary" id="save-button">Save Palette</button>
+        </div>
+        <div id="field-div">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" class="form-control" placeholder="Required. Max 20 characters.">
+            <label for="desc">Description</label>
+            <textarea class="form-control" name="desc" rows="2" placeholder="Optional. Max 200 characters."></textarea>
+            <label>Tags</label>
+            <div>
+                {% for tag in tags %}
+                    <div class="btn-group-toggle form-check-inline tag-box" data-toggle="buttons">
+                        <label class="btn btn-info">
+                            <input type="checkbox" autocomplete="off">{{tag.name}}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            <button class="btn btn-success" id="confirm-button">Confirm</button>
+            <button class="btn btn-danger" id="cancel-button">Cancel</button>
         </div>
     </form>
 </div>

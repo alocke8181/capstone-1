@@ -72,3 +72,9 @@ input[type=color]{
     width: 40%;
     padding-top: 10px;
 }
+
+.tag-box{
+    background-color: lightskyblue;
+    border: 2px solid black;
+    border-radius: 5px;
+}

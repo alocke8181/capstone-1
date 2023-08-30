@@ -1,4 +1,5 @@
 const BASE_URL = 'http://127.0.0.1:5000/';
+$('#field-div').hide();
 
 function populateColorHeaders(){
     //Helper function to populate the color headers
@@ -9,6 +10,7 @@ function populateColorHeaders(){
     }
 }
 populateColorHeaders();
+//Sets the model to default
 $('#default').attr('selected','selected');
 
 async function generatePalette(){
@@ -25,11 +27,11 @@ async function generatePalette(){
             if (this.checked){
                 let $colorPicker = $('#color-section').find('input[type=color]')[i];
                 let color = $colorPicker.value;
-             sendColors.push(color);
+                sendColors.push(color);
                 i++;
             }
             else{
-             sendColors.push("N");
+                sendColors.push("N");
                 i++;
             }
         })
@@ -44,3 +46,37 @@ async function generatePalette(){
     });
 }
 generatePalette();
+
+function showSaveForm(){
+    //Shows the save form when the first save button is clicked
+    let $saveButton = $('#save-button');
+    $saveButton.click(function(event){
+        event.preventDefault();
+        $('#field-div').show();
+    });
+}
+showSaveForm();
+
+function hideSaveForm(){
+    //Hide the save form when the cancel button is clicked
+    $('#cancel-button').click(function(event){
+        event.preventDefault();
+        $('#field-div').hide();
+    });
+}
+hideSaveForm();
+
+async function savePalette(){
+    //Function to save the palette to the database
+    $('#confirm-button').click(async function(event){
+        event.preventDefault();
+        let sendColors = [];
+        let $colorPickers = $('#color-section').find('input[type=color]').each(function(){
+            let color = this.value();
+            sendColors.push(color)
+        });
+        let name = $('#name').value();
+        let desc = $('#desc').value();
+        let response = await axios.post(`${BASE_URL}/palettes/create`, {name : name, desc : desc, colors : sendColors})
+    });
+}

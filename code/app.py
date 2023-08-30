@@ -140,7 +140,8 @@ def show_palette_maker():
     model_list = process_models(first_models.json()['result'])
     first_colors = first_response.json()['result']
     first_colors = process_colors_out(first_colors)
-    return render_template('palettes/create.html', colors=first_colors, models=model_list)
+    tag_list = Tag.query.all()
+    return render_template('palettes/create.html', colors=first_colors, models=model_list, tags=tag_list)
 
 @app.route('/palettes/generate', methods=['POST'])
 def generate_palette():
@@ -163,12 +164,12 @@ def generate_tags():
 
     tag_names = ['Black','Dark Grey','Grey','Light Gray','White','Off-White','Silver','Slate',
     'Red','Brown','Maroon','Salmon','Pink','Crimson',
-    'Orange','Orange Red''Chocolate','Peach','Dark Orange','Goldenrod',
+    'Orange','Orange Red','Chocolate','Peach','Dark Orange','Goldenrod',
     'Yellow','Gold','Lemon','Beige',
     'Green','Lime','Olive','Dark Green','Sea Green','Mint','Forest Green',
     'Blue','Blue Green','Aqua','Cyan','Sky Blue','Navy','Turquoise',
     'Purple','Indigo','Violet','Plum','Magenta','Orchid',
-    'Warm','Hot','Cool','Cold','Neutral','Neon', 'Pastel'
+    'Warm','Hot','Cool','Cold','Neutral','Neon', 'Pastel',
     'Bright','Dark','High Contrast','Low Contrast'
     ]
     tags = []
