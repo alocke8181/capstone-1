@@ -5,7 +5,7 @@
 <p>
     <ul>
         <li>Locking too many colors may have the generator keep yielding the same results.</li>
-        <li>Locked colors may change shift with each generation.</li>
+        <li>Locked colors may shift with each generation.</li>
     </ul>
 </p>
 <div id="color-section">
@@ -38,13 +38,13 @@
             <label for="name">Name</label>
             <input type="text" id="name" name="name" class="form-control" placeholder="Required. Max 20 characters.">
             <label for="desc">Description</label>
-            <textarea class="form-control" name="desc" rows="2" placeholder="Optional. Max 200 characters."></textarea>
+            <textarea id="desc" class="form-control" name="desc" rows="2" placeholder="Optional. Max 200 characters."></textarea>
             <label>Tags</label>
-            <div>
+            <div id="tag-cont">
                 {% for tag in tags %}
                     <div class="btn-group-toggle form-check-inline tag-box" data-toggle="buttons">
                         <label class="btn btn-info">
-                            <input type="checkbox" autocomplete="off">{{tag.name}}
+                            <input type="checkbox" autocomplete="off" data-name="{{tag.name}}">{{tag.name}}
                         </label>
                     </div>
                 {% endfor %}

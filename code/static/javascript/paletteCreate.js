@@ -70,13 +70,21 @@ async function savePalette(){
     //Function to save the palette to the database
     $('#confirm-button').click(async function(event){
         event.preventDefault();
-        let sendColors = [];
+        let colors = [];
         let $colorPickers = $('#color-section').find('input[type=color]').each(function(){
-            let color = this.value();
-            sendColors.push(color)
+            let color = this.value;
+            colors.push(color)
         });
-        let name = $('#name').value();
-        let desc = $('#desc').value();
-        let response = await axios.post(`${BASE_URL}/palettes/create`, {name : name, desc : desc, colors : sendColors})
+        let nameIn = $('#name').val();
+        let descIn = $('#desc').val();
+        let tags = [];
+        $('#tag-cont').find('input[type=checkbox]').each(function(){
+            if (this.checked){
+                tags.push(this.dataset.name);
+            };
+        });
+        let response = await axios.post(`${BASE_URL}/palettes/save`, {name : nameIn, desc : descIn, colors : colors, tags : tags});
+        window.location.replace(BASE_URL);
     });
 }
+savePalette();

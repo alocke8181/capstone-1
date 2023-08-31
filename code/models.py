@@ -62,6 +62,7 @@ class Palette(db.Model):
     light_a = db.Column(db.Text, nullable=False)
     dark_c = db.Column(db.Text, nullable=False)
     dark_a = db.Column(db.Text, nullable=False)
+
 #####################################################################################
 class Tag(db.Model):
     """Tag"""

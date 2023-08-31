@@ -129,7 +129,7 @@ def delete_profile(user_id):
     return redirect('/')    
 
 #####################################################################################
-#Create, Edit, and Delete Palettes
+#Palette creation routes
 
 @app.route('/palettes/new', methods=['GET'])
 def show_palette_maker():
@@ -154,6 +154,34 @@ def generate_palette():
     processed_colors = process_colors_out(generated_colors)
     return jsonify(colors=processed_colors)
 
+@app.route('/palettes/save', methods=['POST'])
+def save_palette():
+    """Save a palette that the user has made."""
+    name = request.json['name']
+    desc = request.json['desc']
+    colors = request.json['colors']
+    tags = request.json['tags']
+    try:
+        palette = Palette(
+            name=name,
+            desc=desc,
+            main=colors[0],
+            light_c=colors[1],
+            light_a=colors[2],
+            dark_c=colors[3],
+            dark_a=colors[4]
+        )
+        for eachTag in tags:
+            tag = Tag.query.filter(Tag.name==eachTag).first()
+            palette.tags.append(tag)
+        db.session.add(palette)
+        db.session.commit()
+    except:
+        return jsonify(error=error)
+    else:
+        return "Success",200
+    
+
 
 #####################################################################################
 #Helper functions
@@ -162,7 +190,7 @@ def generate_tags():
     See Readme for explanaition of pre-generated tags.
     This function only needs to be called once from iPython."""
 
-    tag_names = ['Black','Dark Grey','Grey','Light Gray','White','Off-White','Silver','Slate',
+    tag_names = ['Black','Dark Grey','Grey','Light Gray','White','Off-White','Silver',
     'Red','Brown','Maroon','Salmon','Pink','Crimson',
     'Orange','Orange Red','Chocolate','Peach','Dark Orange','Goldenrod',
     'Yellow','Gold','Lemon','Beige',
