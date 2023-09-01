@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-md-center col-md-4">
+    <h5>Edit your palette.</h5>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {% for field in form if field.widget.input_type != 'hidden' %}
+            {% for error in field.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+            {{ field(placeholder=field.label.text, class="form-control") }}
+        {% endfor %}
+            <button type="submit" class="btn btn-success">Confirm</button>
+            <a href="/palettes/{{ palette.id }}" class="btn btn-outline-secondary">Return</a>
+        </div>
+    </form>
+</div>
+<div id="del-button-cont">
+    <button class="btn btn-danger" id="del-button">Delete Palette</button>
+    <a href="/users/{{palette.id}}/delete">
+        <button class="btn btn-danger" id="confirm-button">Confirm Deletion</button>
+    </a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="http://127.0.0.1:5000/static/javascript/paletteDelete.js"></script>
+{% endblock %}

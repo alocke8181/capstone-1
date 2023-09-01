@@ -3,7 +3,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from models import db, connect_db, User, Palette, Tag
-from forms import RegisterForm, LoginForm, UserEditForm
+from forms import RegisterForm, LoginForm, UserEditForm, PaletteEditForm
 from sqlalchemy.exc import IntegrityError
 import requests
 
@@ -175,12 +175,38 @@ def save_palette():
             tag = Tag.query.filter(Tag.name==eachTag).first()
             palette.tags.append(tag)
         db.session.add(palette)
+        g.user.palettes.append(palette)
+        db.session.add(g.user)
         db.session.commit()
     except:
         return jsonify(error=error)
     else:
         return "Success",200
-    
+#####################################################################################
+#Palette view, edit, and delete routes
+@app.route('/palettes/<int:palette_id>')
+def show_palette(palette_id, methods=['GET']):
+    """Display a palette"""
+    palette = Palette.query.get_or_404(palette_id)
+    user = palette.user[0]
+    return render_template('/palettes/view.html', palette=palette, user=user)
+
+@app.route('/palettes/<int:palette_id>/edit', methods=['GET','POST'])
+def edit_palette(palette_id):
+    """Edit a palette"""
+    palette = Palette.query.get_or_404(palette_id)
+    user = palette.user[0]
+    if not g.user or session[CURR_USER] != user.id:
+        abort(403)
+    form = PaletteEditForm(obj=palette)
+    if form.validate_on_submit():
+        palette.name = form.name.data
+        palette.desc = form.desc.data
+        db.session.add(palette)
+        db.session.commit()
+        return redirect(f'/palettes/{palette.id}')
+    else:
+        return render_template('/palettes/edit.html',form=form, palette=palette)
 
 
 #####################################################################################

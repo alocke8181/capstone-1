@@ -21,3 +21,7 @@ class UserEditForm(FlaskForm):
     pic_url = StringField('Profile Image URL')
     password = PasswordField('Password',validators=[InputRequired()])
 
+class PaletteEditForm(FlaskForm):
+    """Form for editing a palette"""
+    name = StringField('Email',validators=[InputRequired(), Length(max=20, message='Title is too long (max 20 chars)')])
+    desc = TextAreaField('Description',validators=[Length(max=200, message='Description is too long (max 300 chars)')], render_kw={'rows':2})

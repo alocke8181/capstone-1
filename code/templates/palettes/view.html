@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>{{palette.name}}</h3>
+<h4>Created by <a href="/users/{{user.id}}">{{user.username}}</a></h4>
+<i>{{palette.date_created}}</i>
+<p>{{palette.desc}}</p>
+{% if g.user %}
+    <a href="/palettes/{{palette.id}}/edit"><button class="btn btn-success">Edit</button></a>
+{% else %}
+    <form method="POST">
+        <button type="submit" class="btn btn-success">Favorite</button>
+    </form>
+{% endif %}
+<div id="color-section">
+    <!-- VSCode will think the inline styles will cause errors. They won't.-->
+    <div id="main-color" class="color-box">
+        <h4 class="color-header">Main</h4>
+        <div class="color-display" id="main-display" style="background-color: {{palette.main}};"></div>
+        <h6>{{palette.main}}</h6>
+    </div>
+    <div id="light-s-color" class="color-box">
+        <h4 class="color-header">Light Shade</h4>
+        <div class="color-display" id="light-s-display" style="background-color: {{palette.light_c}};"></div>
+        <h6>{{palette.light_c}}</h6>
+    </div>
+    <div id="light-a-color" class="color-box">
+        <h4 class="color-header">Light Accent</h4>
+        <div class="color-display" id="light-a-display" style="background-color: {{palette.light_a}};"></div>
+        <h6>{{palette.light_a}}</h6>
+    </div>
+    <div id="dark-s-color" class="color-box">
+        <h4 class="color-header">Dark Shade</h4>
+        <div class="color-display" id="dark-s-display" style="background-color: {{palette.dark_c}};"></div>
+        <h6>{{palette.dark_c}}</h6>
+    </div>
+    <div id="dark-a-color" class="color-box">
+        <h4 class="color-header">Dark Accent</h4>
+        <div class="color-display" id="dark-a-display" style="background-color: {{palette.dark_a}};"></div>
+        <h6>{{palette.dark_a}}</h6>
+    </div>
+</div>    
+<hr>
+
+{% endblock %}
+

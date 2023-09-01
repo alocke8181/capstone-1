@@ -13,8 +13,8 @@
     <div id="user-palettes">
         <h5>Palettes</h5>
         <!-- VSCode will think the inline styles will cause errors. They won't.-->
-        {% if palettes|length > 0 %}
-            {% for palette in palettes %}
+        {% if user.palettes|length > 0 %}
+            {% for palette in user.palettes %}
             <div class="palette-prev">
                 <div class="color-main" id="color-main" style="background-color: {{palette.main}};"></div>
                 <div class="color-small" id="color-light-c" style="background-color: {{palette.light_c}};"></div>
@@ -34,8 +34,8 @@
     <div id="user-favorites">
         <h5>Favorites</h5>
         <!-- VSCode will think the inline styles will cause errors. They won't.-->
-        {% if palettes|length > 0 %}
-            {% for palette in palettes %}
+        {% if user.favorites|length > 0 %}
+            {% for palette in user.favorites %}
             <div class="palette-prev">
                 <div class="color-main" id="color-main" style="background-color: {{palette.main}};"></div>
                 <div class="color-small" id="color-light-c" style="background-color: {{palette.light_c}};"></div>
