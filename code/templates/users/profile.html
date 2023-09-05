@@ -3,8 +3,8 @@
 {% block content %}
     <div id="profile-div">
         <img src="{{ user.pic_url }}" id="profile-pic" style="width: 200px; height: 200px;">
-        <h5>{{ user.username }}</h5>
-        <p>{{ user.desc }}</p>
+        <h5 id="username">{{ user.username }}</h5>
+        <p id="desc">{{ user.desc }}</p>
         {% if g.user.id == user.id %}
             <a href="/users/{{user.id}}/edit">Edit Profile</a>
         {% endif %}
