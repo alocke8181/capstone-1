@@ -1,3 +1,5 @@
+# Run this file as  python -m unittest test_user_model.py
+
 import os
 from unittest import TestCase
 from sqlalchemy import exc

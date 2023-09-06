@@ -233,6 +233,10 @@ def generate_tags():
     db.session.add_all(tags)
     db.session.commit()
 
+def setup():
+    db.create_all()
+    generate_tags()
+
 def login_user(user):
     """Login the user"""
     session[CURR_USER] = user.id

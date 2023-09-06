@@ -1,3 +1,4 @@
+# Run this file as  python -m unittest test_palette_model.py
 import os
 from unittest import TestCase
 from sqlalchemy import exc
