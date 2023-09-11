@@ -84,7 +84,8 @@ async function savePalette(){
             };
         });
         let response = await axios.post(`${BASE_URL}/palettes/save`, {name : nameIn, desc : descIn, colors : colors, tags : tags});
-        window.location.replace(BASE_URL);
+        let redirUrl = response.data.redir_url
+        window.location.replace(`${BASE_URL}${redirUrl}`);
     });
 }
 savePalette();

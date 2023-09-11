@@ -1,15 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
 <h3>{{palette.name}}</h3>
-<h4>Created by <a href="/users/{{user.id}}">{{user.username}}</a></h4>
+<h4>Created by <a href="/users/{{palette.user[0].id}}">{{palette.user[0].username}}</a></h4>
 <i>{{palette.date_created}}</i>
 <p>{{palette.desc}}</p>
-{% if g.user %}
+{% if g.user.id == palette.user[0].id %}
     <a href="/palettes/{{palette.id}}/edit"><button class="btn btn-success">Edit</button></a>
+{% elif palette in g.user.favorites %}
+    <a href="/palettes/{{palette.id}}/unfavorite">
+        <button id='toggle-fav' class="btn btn-danger">Unfavorite</button>
+    </a>
 {% else %}
-    <form method="POST">
-        <button type="submit" class="btn btn-success">Favorite</button>
-    </form>
+    <a href="/palettes/{{palette.id}}/favorite">
+        <button id='toggle-fav' class="btn btn-warning">Favorite</button>
+    </a>
 {% endif %}
 <div id="color-section">
     <!-- VSCode will think the inline styles will cause errors. They won't.-->
@@ -38,8 +42,21 @@
         <div class="color-display" id="dark-a-display" style="background-color: {{palette.dark_a}};"></div>
         <h6>{{palette.dark_a}}</h6>
     </div>
-</div>    
-<hr>
+</div>
+<div id="tag-section">
+    <ul>
+        <li><h4>Tags:</h4></li>
+        {% for tag in palette.tags %}
+            <li>
+                <button class="btn btn-info">{{tag.name}}</button>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<br>
 
+{% endblock %}
+{% block scripts %}
+<script src="http://127.0.0.1:5000/static/javascript/paletteFavorite.js"></script>
 {% endblock %}
 

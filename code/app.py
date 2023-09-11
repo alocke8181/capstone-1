@@ -29,7 +29,7 @@ connect_db(app)
 def show_home():
     """Show the home page with the 10 most recently created palettes"""
     palettes = Palette.query.order_by(Palette.date_created.desc()).limit(10).all()
-    return render_template('home.html')
+    return render_template('home.html', palettes=palettes)
 
 #####################################################################################
 #Login, Logout, and Register
@@ -156,7 +156,8 @@ def generate_palette():
 
 @app.route('/palettes/save', methods=['POST'])
 def save_palette():
-    """Save a palette that the user has made."""
+    """Save a palette that the user has made.
+    Redirects to the view page for that palette."""
     name = request.json['name']
     desc = request.json['desc']
     colors = request.json['colors']
@@ -181,15 +182,14 @@ def save_palette():
     except:
         return jsonify(error=error)
     else:
-        return "Success",200
+        return jsonify(redir_url = f'palettes/{palette.id}'),200
 #####################################################################################
 #Palette view, edit, and delete routes
 @app.route('/palettes/<int:palette_id>')
 def show_palette(palette_id, methods=['GET']):
     """Display a palette"""
     palette = Palette.query.get_or_404(palette_id)
-    user = palette.user[0]
-    return render_template('/palettes/view.html', palette=palette, user=user)
+    return render_template('/palettes/view.html', palette=palette)
 
 @app.route('/palettes/<int:palette_id>/edit', methods=['GET','POST'])
 def edit_palette(palette_id):
@@ -207,6 +207,48 @@ def edit_palette(palette_id):
         return redirect(f'/palettes/{palette.id}')
     else:
         return render_template('/palettes/edit.html',form=form, palette=palette)
+
+@app.route('/palettes/<int:palette_id>/delete', methods=['GET'])
+def del_palette(palette_id):
+    """Delete a palette"""
+    palette = Palette.query.get_or_404(palette_id)
+    user = palette.user[0]
+    if not g.user or session[CURR_USER] != user.id:
+        abort(403)
+    db.session.delete(palette)
+    db.session.commit()
+    flash('Palette deleted!')
+    return redirect(f'/users/{user.id}')
+
+#####################################################################################
+#Palette favorite/unfavorite routes
+@app.route('/palettes/<int:palette_id>/favorite', methods=['GET'])
+def favorite_palette(palette_id):
+    """Add a palette to the user's favorites.
+    Users cannot favorite their own palettes."""
+    palette = Palette.query.get_or_404(palette_id)
+    owner = palette.user[0]
+    if owner.id == session[CURR_USER]:
+        abort(403)
+    g.user.favorites.append(palette)
+    db.session.add(g.user)
+    db.session.commit()
+    flash('Added to favorites!')
+    return redirect(f'/palettes/{palette.id}')
+
+@app.route('/palettes/<int:palette_id>/unfavorite', methods=['GET'])
+def unfavorite_palette(palette_id):
+    """Remove a palette from the user's favorites.
+    Users cannot unfavorite their own palettes."""
+    palette = Palette.query.get_or_404(palette_id)
+    owner = palette.user[0]
+    if owner.id == session[CURR_USER]:
+        abort(403)
+    g.user.favorites.remove(palette)
+    db.session.add(g.user)
+    db.session.commit()
+    flash('Removed from favorites!')
+    return redirect(f'/palettes/{palette.id}')
 
 
 #####################################################################################

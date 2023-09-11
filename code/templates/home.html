@@ -14,6 +14,7 @@
                 <a href='/palettes/{{ palette.id }}'>
                     <h6>{{ palette.name }}</h6>
                 </a>
+                <i>Created by <a href="/users/{{palette.user[0].id}}">{{palette.user[0].username}}</a></i>
             </div>
             {% endfor %}
         {% else %}

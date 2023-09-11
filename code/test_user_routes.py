@@ -6,7 +6,7 @@ from sqlalchemy import exc
 from models import db, User, Palette, Tag
 from bs4 import BeautifulSoup
 
-os.environ['DATABASE_URL'] = "postgresql:///captstone1-test"
+os.environ['DATABASE_URL'] = "postgresql:///captstone1_test"
 
 from app import app, CURR_USER
 

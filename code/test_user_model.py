@@ -5,7 +5,7 @@ from unittest import TestCase
 from sqlalchemy import exc
 from models import db, User, Palette, Tag
 
-os.environ['DATABASE_URL'] = "postgresql:///capstone1-test"
+os.environ['DATABASE_URL'] = "postgresql:///captstone1_test"
 
 from app import app
 with app.app_context():
