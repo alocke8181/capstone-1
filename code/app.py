@@ -248,7 +248,22 @@ def unfavorite_palette(palette_id):
     db.session.commit()
     return "Success", 200
 
-
+#####################################################################################
+#Palette Searching Routes
+@app.route('/palettes/browse', methods=['GET'])
+def browse_palettes():
+    """Allow users to browse for palettes.
+    Currently it is only based on the tags.
+    Tags are stored and seperated with '+' signs.
+    Later features would allow searches based on usernames and titles.
+    It shows 20 palettes at each time.
+    By default they are sorted by most recent."""
+    pageNum = request.args.get('page') or 1
+    if request.args.get('tags') not None:
+        tags = request.args.get('tags').split('+')
+    else:
+        tags = []
+    #Create a form for this using wtforms SelectMultipleField
 #####################################################################################
 #Helper functions
 def generate_tags():
@@ -332,6 +347,7 @@ def process_models(models):
         model_title = model.replace('_',' ').title()
         processed_models[model] = model_title
     return processed_models
+
 #####################################################################################
 #Error routes
 
