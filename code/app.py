@@ -233,8 +233,7 @@ def favorite_palette(palette_id):
     g.user.favorites.append(palette)
     db.session.add(g.user)
     db.session.commit()
-    flash('Added to favorites!')
-    return redirect(f'/palettes/{palette.id}')
+    return "Success", 200
 
 @app.route('/palettes/<int:palette_id>/unfavorite', methods=['GET'])
 def unfavorite_palette(palette_id):
@@ -247,8 +246,7 @@ def unfavorite_palette(palette_id):
     g.user.favorites.remove(palette)
     db.session.add(g.user)
     db.session.commit()
-    flash('Removed from favorites!')
-    return redirect(f'/palettes/{palette.id}')
+    return "Success", 200
 
 
 #####################################################################################
