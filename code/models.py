@@ -63,6 +63,20 @@ class Palette(db.Model):
     dark_c = db.Column(db.Text, nullable=False)
     dark_a = db.Column(db.Text, nullable=False)
 
+    def partial_serialize(self):
+        return {
+            'name': self.name,
+            'id':self.id,
+            'user_id':self.user[0].id,
+            'user': self.user[0].username,
+            'timestamp':self.date_created,
+            'main': self.main,
+            'light_c':self.light_c,
+            'light_a':self.light_a,
+            'dark_c':self.dark_c,
+            'dark_a':self.dark_a,
+        }
+
 #####################################################################################
 class Tag(db.Model):
     """Tag"""

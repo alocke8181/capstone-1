@@ -17,10 +17,10 @@
             {% for palette in user.palettes %}
             <div class="palette-prev">
                 <div class="color-main" id="color-main" style="background-color: {{palette.main}};"></div>
-                <div class="color-small" id="color-light-c" style="background-color: {{palette.light_c}};"></div>
+                <div class="color-small no-left-border" id="color-light-c" style="background-color: {{palette.light_c}};"></div>
                 <div class="color-small" id="color-light-a" style="background-color: {{palette.light_a}};"></div>
                 <div class="color-small" id="color-dark-c" style="background-color: {{palette.dark_c}};"></div>
-                <div class="color-small" id="color-dark-a" style="background-color: {{palette.dark_a}};"></div>
+                <div class="color-small no-right-border" id="color-dark-a" style="background-color: {{palette.dark_a}};"></div>
                 <a href='/palettes/{{ palette.id }}'>
                     <h6>{{ palette.name }}</h6>
                 </a>
@@ -38,10 +38,10 @@
             {% for palette in user.favorites %}
             <div class="palette-prev">
                 <div class="color-main" id="color-main" style="background-color: {{palette.main}};"></div>
-                <div class="color-small" id="color-light-c" style="background-color: {{palette.light_c}};"></div>
+                <div class="color-small no-left-border" id="color-light-c" style="background-color: {{palette.light_c}};"></div>
                 <div class="color-small" id="color-light-a" style="background-color: {{palette.light_a}};"></div>
                 <div class="color-small" id="color-dark-c" style="background-color: {{palette.dark_c}};"></div>
-                <div class="color-small" id="color-dark-a" style="background-color: {{palette.dark_a}};"></div>
+                <div class="color-small no-right-border" id="color-dark-a" style="background-color: {{palette.dark_a}};"></div>
                 <a href='/palettes/{{ palette.id }}'>
                     <h6>{{ palette.name }}</h6>
                 </a>

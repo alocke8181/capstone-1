@@ -27,8 +27,8 @@ connect_db(app)
 
 @app.route('/')
 def show_home():
-    """Show the home page with the 10 most recently created palettes"""
-    palettes = Palette.query.order_by(Palette.date_created.desc()).limit(10).all()
+    """Show the home page with the 8 most recently created palettes"""
+    palettes = Palette.query.order_by(Palette.date_created.desc(), Palette.name.desc()).limit(8).all()
     return render_template('home.html', palettes=palettes)
 
 #####################################################################################
@@ -251,19 +251,28 @@ def unfavorite_palette(palette_id):
 #####################################################################################
 #Palette Searching Routes
 @app.route('/palettes/browse', methods=['GET'])
-def browse_palettes():
+def show_browse_palettes():
     """Allow users to browse for palettes.
     Currently it is only based on the tags.
     Tags are stored and seperated with '+' signs.
     Later features would allow searches based on usernames and titles.
     It shows 20 palettes at each time.
     By default they are sorted by most recent."""
-    pageNum = request.args.get('page') or 1
-    if request.args.get('tags') not None:
-        tags = request.args.get('tags').split('+')
-    else:
-        tags = []
-    #Create a form for this using wtforms SelectMultipleField
+    palettes = Palette.query.order_by(Palette.date_created.desc(), Palette.name.desc()).limit(16).all()
+    return render_template('/palettes/browse.html', palettes=palettes)
+
+@app.route('/palettes/browse/load', methods=['GET'])
+def load_more_palettes():
+    """Loads 16 more palettes when accessed.
+    The 'page' of palettes to load is sent via query params."""
+    pageNum = int(request.args.get('page'))
+    palettes = Palette.query.order_by(Palette.date_created.desc(), Palette.name.desc()).offset(16*pageNum).limit(16).all()
+    pal_serialized = []
+    for palette in palettes:
+        pal_serialized.append(palette.partial_serialize())
+    return jsonify(palettes = pal_serialized)
+
+    
 #####################################################################################
 #Helper functions
 def generate_tags():
