@@ -7,23 +7,6 @@
         </form>
     </div>
     <div id="pal-div">
-        {% if palettes|length > 0 %}
-            {% for palette in palettes %}
-            <div class="palette-prev {{palette.name}}">
-                <div class="color-main" id="color-main" style="background-color: {{palette.main}};"></div>
-                <div class="color-small no-left-border" id="color-light-c" style="background-color: {{palette.light_c}};"></div>
-                <div class="color-small" id="color-light-a" style="background-color: {{palette.light_a}};"></div>
-                <div class="color-small" id="color-dark-c" style="background-color: {{palette.dark_c}};"></div>
-                <div class="color-small no-right-border" id="color-dark-a" style="background-color: {{palette.dark_a}};"></div>
-                <a href='/palettes/{{ palette.id }}'>
-                    <h6>{{ palette.name }}</h6>
-                </a>
-                <i>Created by <a href="/users/{{palette.user[0].id}}">{{palette.user[0].username}}</a></i>
-            </div>
-            {% endfor %}
-        {% else %}
-            <p>No palettes have been made yet!</p>
-        {% endif %}
     </div>
     <br>
     <div id="footer">

@@ -6,12 +6,14 @@
 <i>{{palette.date_created}}</i>
 <p>{{palette.desc}}</p>
 
-{% if g.user.id == palette.user[0].id %}
-    <a href="/palettes/{{palette.id}}/edit"><button class="btn btn-success">Edit</button></a>
-{% elif palette in g.user.favorites %}
-    <button id='toggle-fav' class="btn btn-danger" data-palid = "{{palette.id}}">Unfavorite</button>
-{% else %}
-    <button id='toggle-fav' class="btn btn-warning" data-palid = "{{palette.id}}">Favorite</button>
+{% if g.user %}
+    {% if g.user.id == palette.user[0].id %}
+        <a href="/palettes/{{palette.id}}/edit"><button class="btn btn-success">Edit</button></a>
+    {% elif palette in g.user.favorites %}
+        <button id='toggle-fav' class="btn btn-danger" data-palid = "{{palette.id}}">Unfavorite</button>
+    {% else %}
+        <button id='toggle-fav' class="btn btn-warning" data-palid = "{{palette.id}}">Favorite</button>
+    {% endif %}
 {% endif %}
 
 <div id="color-section">

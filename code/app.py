@@ -228,7 +228,7 @@ def favorite_palette(palette_id):
     Users cannot favorite their own palettes."""
     palette = Palette.query.get_or_404(palette_id)
     owner = palette.user[0]
-    if owner.id == session[CURR_USER]:
+    if owner.id == session[CURR_USER] or g.user == None:
         abort(403)
     g.user.favorites.append(palette)
     db.session.add(g.user)
@@ -241,7 +241,7 @@ def unfavorite_palette(palette_id):
     Users cannot unfavorite their own palettes."""
     palette = Palette.query.get_or_404(palette_id)
     owner = palette.user[0]
-    if owner.id == session[CURR_USER]:
+    if owner.id == session[CURR_USER] or g.user == None:
         abort(403)
     g.user.favorites.remove(palette)
     db.session.add(g.user)
@@ -249,17 +249,11 @@ def unfavorite_palette(palette_id):
     return "Success", 200
 
 #####################################################################################
-#Palette Searching Routes
+#Palette Browsing Routes
 @app.route('/palettes/browse', methods=['GET'])
 def show_browse_palettes():
-    """Allow users to browse for palettes.
-    Currently it is only based on the tags.
-    Tags are stored and seperated with '+' signs.
-    Later features would allow searches based on usernames and titles.
-    It shows 20 palettes at each time.
-    By default they are sorted by most recent."""
-    palettes = Palette.query.order_by(Palette.date_created.desc(), Palette.name.desc()).limit(16).all()
-    return render_template('/palettes/browse.html', palettes=palettes)
+    """Return the render template"""
+    return render_template('/palettes/browse.html')
 
 @app.route('/palettes/browse/load', methods=['GET'])
 def load_more_palettes():
