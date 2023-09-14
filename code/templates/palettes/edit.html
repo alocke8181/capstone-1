@@ -8,10 +8,10 @@
             {% for error in field.errors %}
                 <span class="text-danger">{{ error }}</span>
             {% endfor %}
-            {{ field(placeholder=field.label.text, class="form-control") }}
+            {{ field(placeholder=field.label.text, class="form-control edit-field") }}
         {% endfor %}
             <button type="submit" class="btn btn-success">Confirm</button>
-            <a href="/palettes/{{ palette.id }}" class="btn btn-outline-secondary">Return</a>
+            <a href="/palettes/{{ palette.id }}"><button class="btn btn-info">Return</button></a>
         </div>
     </form>
 </div>

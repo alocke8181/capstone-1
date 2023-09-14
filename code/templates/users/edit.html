@@ -8,18 +8,18 @@
             {% for error in field.errors %}
                 <span class="text-danger">{{ error }}</span>
             {% endfor %}
-            {{ field(placeholder=field.label.text, class="form-control") }}
+            {{ field(placeholder=field.label.text, class="form-control edit-field") }}
         {% endfor %}
         {% if form.password.errors %}
             {% for error in form.password.errors %}
                 <span>{{ error }}</span>
             {% endfor %}
         {% endif %}
-        {{ form.password(placeholder="Enter your password to confirm") }}
+        {{ form.password(placeholder="Enter your password to confirm", class="edit-password") }}
 
         <div>
             <button class="btn btn-success">Confirm</button>
-            <a href="/users/{{ g.user.id }}" class="btn btn-outline-secondary">Return</a>
+            <a href="/users/{{ g.user.id }}"><button class="btn btn-info">Return</button></a>
         </div>
     </form>
 </div>
