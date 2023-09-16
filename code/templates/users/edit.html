@@ -2,6 +2,7 @@
 {% block content %}
 <div class="row justify-content-md-center col-md-4">
     <h5>Edit your profile.</h5>
+    <p>Max description length 300 characters.</p>
     <form method="POST">
         {{ form.hidden_tag() }}
         {% for field in form if field.widget.input_type != 'hidden' and field.name != 'password' %}

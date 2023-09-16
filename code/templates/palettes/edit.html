@@ -1,19 +1,50 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="row justify-content-md-center col-md-4">
-    <h5>Edit your palette.</h5>
-    <form method="POST">
-        {{ form.hidden_tag() }}
-        {% for field in form if field.widget.input_type != 'hidden' %}
-            {% for error in field.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-            {{ field(placeholder=field.label.text, class="form-control edit-field") }}
-        {% endfor %}
-            <button type="submit" class="btn btn-success">Confirm</button>
-            <a href="/palettes/{{ palette.id }}"><button class="btn btn-info">Return</button></a>
-        </div>
-    </form>
+<div id="color-section">
+    <!-- VSCode will think the inline styles will cause errors. They won't.-->
+    <div id="main-color" class="color-box">
+        <h4 class="color-header">Main</h4>
+        <div class="color-display" id="main-display" style="background-color: {{palette.main}};"></div>
+        <h6>{{palette.main}}</h6>
+    </div>
+    <div id="light-s-color" class="color-box">
+        <h4 class="color-header">Light Shade</h4>
+        <div class="color-display" id="light-s-display" style="background-color: {{palette.light_c}};"></div>
+        <h6>{{palette.light_c}}</h6>
+    </div>
+    <div id="light-a-color" class="color-box">
+        <h4 class="color-header">Light Accent</h4>
+        <div class="color-display" id="light-a-display" style="background-color: {{palette.light_a}};"></div>
+        <h6>{{palette.light_a}}</h6>
+    </div>
+    <div id="dark-s-color" class="color-box">
+        <h4 class="color-header">Dark Shade</h4>
+        <div class="color-display" id="dark-s-display" style="background-color: {{palette.dark_c}};"></div>
+        <h6>{{palette.dark_c}}</h6>
+    </div>
+    <div id="dark-a-color" class="color-box">
+        <h4 class="color-header">Dark Accent</h4>
+        <div class="color-display" id="dark-a-display" style="background-color: {{palette.dark_a}};"></div>
+        <h6>{{palette.dark_a}}</h6>
+    </div>
+</div>
+<div class="palette-editor" id="{{palette.id}}">
+        <form id="edit-form">
+            <input type="text" id="name" class='form-control login-field' value="{{palette.name}}">
+            <textarea id="desc" class="form-control desc-field" name="desc" rows="2">{{palette.desc}}</textarea>
+            <div id="tag-cont">
+                {% for tag in tags %}
+                    <div class="btn-group-toggle form-check-inline tag-box" data-toggle="buttons">
+                        <label class="btn btn-info">
+                            <input type="checkbox" autocomplete="off" data-name="{{tag.name}}" {% if tag in palette.tags %} checked {% endif %}>{{tag.name}}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            <br>
+        </form>
+        <button id='save-button'type="submit" class="btn btn-success">Save</button>
+        <a href="/palettes/{{ palette.id }}"><button class="btn btn-warning">Return</button></a>
 </div>
 <div id="del-button-cont">
     <button class="btn btn-danger" id="del-button">Delete Palette</button>
@@ -24,5 +55,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="http://127.0.0.1:5000/static/javascript/paletteDelete.js"></script>
+<script src="http://127.0.0.1:5000/static/javascript/paletteEdit.js"></script>
 {% endblock %}

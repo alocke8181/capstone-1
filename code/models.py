@@ -63,7 +63,10 @@ class Palette(db.Model):
     dark_c = db.Column(db.Text, nullable=False)
     dark_a = db.Column(db.Text, nullable=False)
 
-    def partial_serialize(self):
+    def serialize(self):
+        tags = []
+        for tag in self.tags:
+            tags.append(tag.name)
         return {
             'name': self.name,
             'id':self.id,
@@ -75,6 +78,8 @@ class Palette(db.Model):
             'light_a':self.light_a,
             'dark_c':self.dark_c,
             'dark_a':self.dark_a,
+            'desc':self.desc,
+            'tags':tags
         }
 
 #####################################################################################

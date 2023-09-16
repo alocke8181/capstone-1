@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, IntegerField, TextAreaField, PasswordField
+from wtforms import StringField, BooleanField, IntegerField, TextAreaField, PasswordField, SelectMultipleField
 from wtforms.validators import InputRequired, Optional, NumberRange, URL, AnyOf, Length
+from models import Tag
 
 class RegisterForm(FlaskForm):
     """Form for registering users"""

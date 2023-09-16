@@ -191,22 +191,34 @@ def show_palette(palette_id, methods=['GET']):
     palette = Palette.query.get_or_404(palette_id)
     return render_template('/palettes/view.html', palette=palette)
 
-@app.route('/palettes/<int:palette_id>/edit', methods=['GET','POST'])
+@app.route('/palettes/<int:palette_id>/edit', methods=['GET'])
 def edit_palette(palette_id):
     """Edit a palette"""
     palette = Palette.query.get_or_404(palette_id)
     user = palette.user[0]
+    tags = Tag.query.all()
     if not g.user or session[CURR_USER] != user.id:
         abort(403)
-    form = PaletteEditForm(obj=palette)
-    if form.validate_on_submit():
-        palette.name = form.name.data
-        palette.desc = form.desc.data
-        db.session.add(palette)
-        db.session.commit()
-        return redirect(f'/palettes/{palette.id}')
-    else:
-        return render_template('/palettes/edit.html',form=form, palette=palette)
+    return render_template('/palettes/edit.html',palette=palette, tags=tags)
+
+@app.route('/palettes/<int:palette_id>/edit', methods=['POST'])
+def save_edit(palette_id):
+    name = request.json['name']
+    desc = request.json['desc']
+    tags = request.json['tags']
+    palette = Palette.query.get_or_404(palette_id)
+    palette.name = name
+    palette.desc = desc
+    palette.tags.clear()
+    for eachTag in tags:
+        tag = Tag.query.filter(Tag.name==eachTag).first()
+        palette.tags.append(tag)
+    db.session.add(palette)
+    db.session.commit()
+    return jsonify(redir_url = f'palettes/{palette.id}'),200
+
+    
+
 
 @app.route('/palettes/<int:palette_id>/delete', methods=['GET'])
 def del_palette(palette_id):
@@ -263,7 +275,7 @@ def load_more_palettes():
     palettes = Palette.query.order_by(Palette.date_created.desc(), Palette.name.desc()).offset(16*pageNum).limit(16).all()
     pal_serialized = []
     for palette in palettes:
-        pal_serialized.append(palette.partial_serialize())
+        pal_serialized.append(palette.serialize())
     return jsonify(palettes = pal_serialized)
 
     
@@ -350,6 +362,30 @@ def process_models(models):
         model_title = model.replace('_',' ').title()
         processed_models[model] = model_title
     return processed_models
+
+def make_random_palettes(numPals):
+    """Helper function to generate a number of random palettes."""
+    for i in range(1, numPals+1):
+        res = requests.post(BASE_URL, json={'model' : 'default', 'input' : ['N','N','N','N','N']})
+        gen_colors = res.json()['result']
+        proc_colors = process_colors_out(gen_colors)
+        print(proc_colors)
+        palette = Palette(
+            name=f'Test {i}', 
+            desc=f'Test palette {i}', 
+            main=proc_colors['main'],
+            light_c=proc_colors['light_c'],
+            light_a=proc_colors['light_a'],
+            dark_c=proc_colors['dark_c'],
+            dark_a=proc_colors['dark_a'])
+        tags = Tag.query.limit(5).all()
+        for eachTag in tags:
+            palette.tags.append(eachTag)
+        db.session.add(palette)
+        user = User.query.get(1)
+        user.palettes.append(palette)
+        db.session.add(user)
+        db.session.commit()
 
 #####################################################################################
 #Error routes
