@@ -5,6 +5,23 @@ $('#del-button').click(function(){
     $('#confirm-button').show();
 });
 
+function charCounter(){
+    let $charCount = $('#char-counter');
+    let $inputField = $('textarea');
+    let len = $inputField.val().length;
+    $charCount.text(`${len}/200`);
+    if (len > 200){
+        $charCount.css('color','red');
+        $('#save-button').prop('disabled',true);
+    } if (len <=200){
+        $charCount.css('color','#E5EBEF');
+        $('#save-button').prop('disabled',false);
+    }
+};
+charCounter();
+$('textarea').on('keyup', function(){
+    charCounter();
+});
 
 async function editPalette(){
     //Function to save the palette to the database

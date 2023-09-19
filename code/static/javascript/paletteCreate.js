@@ -89,3 +89,38 @@ async function savePalette(){
     });
 }
 savePalette();
+
+function nameCounter(){
+    let $charCount = $('#name-counter');
+    let $inputField = $('#name');
+    let len = $inputField.val().length;
+    $charCount.text(`${len}/20`);
+    if (len > 20){
+        $charCount.css('color','red');
+        $('#confirm-button').prop('disabled',true);
+    } if (len <=20){
+        $charCount.css('color','#E5EBEF');
+        $('#confirm-button').prop('disabled',false);
+    }
+};
+nameCounter();
+$('#name').on('keyup', function(){
+    nameCounter();
+});
+function descCounter(){
+    let $charCount = $('#desc-counter');
+    let $inputField = $('#desc');
+    let len = $inputField.val().length;
+    $charCount.text(`${len}/200`);
+    if (len > 200){
+        $charCount.css('color','red');
+        $('#confirm-button').prop('disabled',true);
+    } if (len <=200){
+        $charCount.css('color','#E5EBEF');
+        $('#confirm-button').prop('disabled',false);
+    }
+};
+descCounter();
+$('#desc').on('keyup', function(){
+    descCounter();
+});

@@ -2,7 +2,7 @@
 {% block content %}
 <div class="row justify-content-md-center col-md-4">
     <h5>Edit your profile.</h5>
-    <p>Max description length 300 characters.</p>
+    <p>Max description length 300 characters. (<i id="char-counter"></i>)</p>
     <form method="POST">
         {{ form.hidden_tag() }}
         {% for field in form if field.widget.input_type != 'hidden' and field.name != 'password' %}
@@ -19,10 +19,10 @@
         {{ form.password(placeholder="Enter your password to confirm", class="edit-password") }}
 
         <div>
-            <button class="btn btn-success">Confirm</button>
-            <a href="/users/{{ g.user.id }}"><button class="btn btn-info">Return</button></a>
+            <button id ='save-button' class="btn btn-success">Save</button>
         </div>
     </form>
+    <a href="/users/{{ g.user.id }}"><button class="btn btn-info">Return</button></a>
 </div>
 <div id="del-button-cont">
     <button class="btn btn-danger" id="del-button">Delete Profile</button>
@@ -33,5 +33,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="http://127.0.0.1:5000/static/javascript/userDelete.js"></script>
+<script src="http://127.0.0.1:5000/static/javascript/userEdit.js"></script>
 {% endblock %}
