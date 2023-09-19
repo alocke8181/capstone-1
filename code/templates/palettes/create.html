@@ -34,7 +34,9 @@
         </div>
         <div id="button-div">
             <button class="btn btn-primary" id="gen-button">Generate Palette</button>
+            {% if g.user %}
             <button class="btn btn-secondary" id="save-button">Save Palette</button>
+            {% endif %}
         </div>
         <div id="field-div">
             <label for="name">Name (<i id="name-counter"></i>)</label>
@@ -51,7 +53,7 @@
                     </div>
                 {% endfor %}
             </div>
-            <button class="btn btn-success" id="confirm-button">Confirm</button>
+            <button class="btn btn-success" id="confirm-button" disabled>Confirm</button>
             <button class="btn btn-danger" id="cancel-button">Cancel</button>
         </div>
     </form>

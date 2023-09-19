@@ -95,10 +95,10 @@ function nameCounter(){
     let $inputField = $('#name');
     let len = $inputField.val().length;
     $charCount.text(`${len}/20`);
-    if (len > 20){
+    if (len > 20 || len <=0){
         $charCount.css('color','red');
         $('#confirm-button').prop('disabled',true);
-    } if (len <=20){
+    } if (len <=20 && len >=1){
         $charCount.css('color','#E5EBEF');
         $('#confirm-button').prop('disabled',false);
     }
@@ -106,21 +106,4 @@ function nameCounter(){
 nameCounter();
 $('#name').on('keyup', function(){
     nameCounter();
-});
-function descCounter(){
-    let $charCount = $('#desc-counter');
-    let $inputField = $('#desc');
-    let len = $inputField.val().length;
-    $charCount.text(`${len}/200`);
-    if (len > 200){
-        $charCount.css('color','red');
-        $('#confirm-button').prop('disabled',true);
-    } if (len <=200){
-        $charCount.css('color','#E5EBEF');
-        $('#confirm-button').prop('disabled',false);
-    }
-};
-descCounter();
-$('#desc').on('keyup', function(){
-    descCounter();
 });
