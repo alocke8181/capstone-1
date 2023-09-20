@@ -40,6 +40,10 @@ I made the decision early on to have all the tags be pre-generated, instead of a
 
 If you decide to run this locally, you'll need to open ipython, run app.py, and then run the function `setup()`. This creates all the tables for the models, generates all the tags, and adds them to the database. If you want to pre-populate your database with palettes, you can use `make_random_palettes([num_palettes])`. This will create a specified amount of random palettes. Important: only the colors will be random. The names, description, and tags will not be. It will also require a user with the ID of 1.
 
+### To Be Done
+
+The main feature I want to add in the future is searching functionality to the browse page. The ability to search by tags, creators, and titles etc. Also, the page for each palette was going to have a demo website below it to show each color in use. This was cut for time. Other features could be a commenting system on palettes.
+
 ### Tools Used
 
 This is a list of what I used to make this. Use `requirements.txt` to install all required  Python packages, not this list.
