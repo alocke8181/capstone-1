@@ -1,20 +1,38 @@
 const BASE_URL = 'http://127.0.0.1:5000/';
 let loadCounter = 1;
 let $palDiv = $('#pal-div');
+let $loadBut = $('#load-but')
+
+function loadingOn(){
+    $loadBut.text('Loading');
+    $loadBut.removeClass('btn-primary');
+    $loadBut.addClass('btn-warning');
+    $loadBut.prop('disabled',true);
+};
+function loadingOff(){
+    $loadBut.text('See More');
+    $loadBut.removeClass('btn-warning');
+    $loadBut.addClass('btn-primary');
+    $loadBut.prop('disabled',false);
+};
+
+
 
 async function loadPalettes(){
+    loadingOn();
     let response = await axios.get(`${BASE_URL}/palettes/browse/load?page=0`);
     let palettes = response.data['palettes'];
     for (let eachPalette in palettes){
         let eachPal = generateHTMLPrev(palettes[eachPalette]);
         $palDiv.append($(eachPal));
     };
+    loadingOff();
 };
 loadPalettes();
 
 async function loadMorePalettes(){
-    let $loadBut = $('#load-but')
     $loadBut.on('click', async function(){
+        loadingOn();
         let response = await axios.get(`${BASE_URL}/palettes/browse/load?page=${loadCounter}`);
         loadCounter++;
         let palettes = response.data['palettes'];
@@ -28,7 +46,7 @@ async function loadMorePalettes(){
             $loadBut.addClass('btn-danger');
             $loadBut.unbind('click');
             $loadBut.prop('disabled',true)
-        };
+        }
         if (palettes.length == 16){
             let response = await axios.get(`${BASE_URL}/palettes/browse?page=${loadCounter}`);
             let palettes = response.data['palettes'];
@@ -39,7 +57,11 @@ async function loadMorePalettes(){
                 $loadBut.unbind('click');
                 $loadBut.prop('disabled',true)
             };
+        }
+        if (palettes.length > 16){
+            loadingOff();
         };
+
     });
 };
 loadMorePalettes();
