@@ -1,4 +1,4 @@
-const BASE_URL = 'http://127.0.0.1:5000/';
+const BASE_URL = 'https://palette-place.onrender.com/';
 //Simple script to hide the confirm button and then show it when the first is clicked.
 $('#confirm-button').hide();
 $('#del-button').click(function(){
