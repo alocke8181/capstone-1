@@ -1,4 +1,4 @@
-const BASE_URL = 'http://127.0.0.1:5000/';
+const BASE_URL = 'https://palette-place.onrender.com/';
 $('#field-div').hide();
 
 function populateColorHeaders(){
@@ -89,3 +89,21 @@ async function savePalette(){
     });
 }
 savePalette();
+
+function nameCounter(){
+    let $charCount = $('#name-counter');
+    let $inputField = $('#name');
+    let len = $inputField.val().length;
+    $charCount.text(`${len}/20`);
+    if (len > 20 || len <=0){
+        $charCount.css('color','red');
+        $('#confirm-button').prop('disabled',true);
+    } if (len <=20 && len >=1){
+        $charCount.css('color','#E5EBEF');
+        $('#confirm-button').prop('disabled',false);
+    }
+};
+nameCounter();
+$('#name').on('keyup', function(){
+    nameCounter();
+});

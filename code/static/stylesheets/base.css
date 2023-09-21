@@ -211,7 +211,7 @@ input[type=color]{
 }
 
 .desc-field{
-    width: 15%;
+    width: 20%;
     height: 150px;
     margin-bottom: 8px;
 }
@@ -232,3 +232,4 @@ button{
     margin: auto;
     width: 100%;
 }
+
