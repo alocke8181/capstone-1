@@ -15,6 +15,7 @@ BASE_URL = 'http://colormind.io/api/'
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://dejacydg:9jX6UdhDmncVL2k_A935aVzdJNkwuP7h@mahmud.db.elephantsql.com/dejacydg'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///capstone1'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['SECRET_KEY'] = 'secret'
