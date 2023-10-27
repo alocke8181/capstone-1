@@ -233,3 +233,6 @@ button{
     width: 100%;
 }
 
+.highlight-sug{
+    background-color: yellow;
+}

@@ -44,15 +44,14 @@
             <label for="desc">Description (<i id="desc-counter"></i>)</label>
             <textarea id="desc" class="form-control" name="desc" rows="2" placeholder="Optional. Max 200 characters."></textarea>
             <label>Tags</label>
-            <div id="tag-cont">
-                {% for tag in tags %}
-                    <div class="btn-group-toggle form-check-inline tag-box" data-toggle="buttons">
-                        <label class="btn btn-info">
-                            <input type="checkbox" autocomplete="off" data-name="{{tag.name}}">{{tag.name}}
-                        </label>
-                    </div>
-                {% endfor %}
+            <input type="text" name="tag-search" id="tag-search" placeholder="Search for Tags" class="form-control">
+            <div>
+                <ul id="suggestions"></ul>
             </div>
+            <div>
+                <ul id="added-tags"></ul>
+            </div>
+            <br>
             <button class="btn btn-success" id="confirm-button" disabled>Confirm</button>
             <button class="btn btn-danger" id="cancel-button">Cancel</button>
         </div>

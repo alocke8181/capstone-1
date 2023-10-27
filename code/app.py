@@ -14,8 +14,8 @@ DEFAULT_PIC = '/static/default-user-icon.png'
 BASE_URL = 'http://colormind.io/api/'
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://dejacydg:9jX6UdhDmncVL2k_A935aVzdJNkwuP7h@mahmud.db.elephantsql.com/dejacydg'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///capstone1'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://dejacydg:9jX6UdhDmncVL2k_A935aVzdJNkwuP7h@mahmud.db.elephantsql.com/dejacydg'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///capstone1'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['SECRET_KEY'] = 'secret'
@@ -279,7 +279,16 @@ def load_more_palettes():
         pal_serialized.append(palette.serialize())
     return jsonify(palettes = pal_serialized)
 
-    
+#####################################################################################
+#Tag Route
+def get_Tag_Name(tag):
+    return tag.name
+
+@app.route('/tags', methods=['GET'])
+def get_all_tags():
+    tag_objects = Tag.query.all()
+    tag_names = list(map(get_Tag_Name, tag_objects))
+    return jsonify(tags = tag_names)
 #####################################################################################
 #Helper functions
 def generate_tags():

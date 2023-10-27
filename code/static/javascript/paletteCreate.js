@@ -1,5 +1,18 @@
-const BASE_URL = 'https://palette-place.onrender.com/';
-//const BASE_URL = 'http://127.0.0.1:5000/'
+//const BASE_URL = 'https://palette-place.onrender.com/';
+const BASE_URL = 'http://127.0.0.1:5000/'
+let tagList;
+const tagSearchBar = $('#tag-search');
+let sugList = $('#suggestions');
+const noResult = 'No Tags Found!';
+const addedTags = $('#added-tags');
+
+
+async function getTags(){
+    let response = await axios.get(`${BASE_URL}/tags`);
+    tagList = response.data.tags;
+};
+getTags();
+
 $('#field-div').hide();
 $('#confirm-button').prop('disabled',true);
 
@@ -67,6 +80,67 @@ function hideSaveForm(){
     });
 }
 hideSaveForm();
+
+function searchTagList(str){
+    let lower = str.toLowerCase();
+    let results = tagList.filter(eachTag => eachTag.toLowerCase().includes(lower));
+    if (results.length ==0){
+        results.push(noResult);
+    }if(results.length >5){
+        results = results.slice(0,5);
+    };
+    return results;
+};
+
+function clearSuggestions(){
+	if(sugList.children().length > 0){
+		Array.from(sugList.children()).forEach(eachChild => eachChild.remove());
+	};
+};
+
+function tagSearchHandler(e){
+    clearSuggestions();
+    let query = tagSearchBar.val();
+    if(query !== ''){
+        let tags = searchTagList(query);
+        showSuggestions(tags,query);
+    }else{
+        tagSearchBar.val(tagSearchBar.defaultValue);
+    };
+};
+
+function showSuggestions(tags, query){
+    tags.forEach(eachTag =>{
+        let sugg = $('<li>');
+        if(eachTag !== noResult){
+            sugg.html(boldSuggestion(eachTag, query));
+            sugg.data('tag-name', eachTag);
+            sugg.on('mouseover', () => sugg.addClass('highlight-sug'));
+            sugg.on('mouseout', () => sugg.removeClass('highlight-sug'));
+            sugg.on('click', () => addTag(eachTag));
+        }else{
+            sugg.text(noResult);
+            sugg.addClass('no-result');
+        };
+        sugList.append(sugg);
+    });
+}
+
+function addTag(tag){
+    console.log(tag);
+};
+
+function boldSuggestion(tag, query){
+    let tagLower = tag.toLowerCase();
+    let queryLower = query.toLowerCase();
+    let firstIdx = tagLower.indexOf(queryLower);
+    let lastIdx = firstIdx + query.length;
+
+    let firstStr = tag.slice(0,firstIdx);
+    let boldStr = tag.slice(firstIdx, lastIdx);
+    let lastStr = tag.slice(lastIdx);
+    return firstStr + "<b>" + boldStr + "</b>" + lastStr;
+};
 
 async function savePalette(){
     //Function to save the palette to the database
@@ -136,3 +210,5 @@ $('#desc').on('keyup', function(){
     descCounter();
     checkLengths();
 });
+
+tagSearchBar.on('keyup', tagSearchHandler)
