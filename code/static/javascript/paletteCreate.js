@@ -114,8 +114,8 @@ function showSuggestions(tags, query){
         let sugg = $('<li>');
         if(eachTag !== noResult){
             sugg.html(boldSuggestion(eachTag, query));
-            sugg.on('mouseover', (e) => e.target.classList.add('highlight-sug'));
-            sugg.on('mouseout', (e) => e.target.classList.remove('highlight-sug'));
+            sugg.on('mouseover', () => sugg.addClass('highlight-sug'));
+            sugg.on('mouseout', () => sugg.removeClass('highlight-sug'));
             sugg.on('click', () => addTag(eachTag));
         }else{
             sugg.text(noResult);
@@ -124,6 +124,7 @@ function showSuggestions(tags, query){
         sugList.append(sugg);
     });
 }
+
 
 function addTag(tag){
     if(checkTagAlreadyAdded(tag)){
