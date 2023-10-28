@@ -112,19 +112,28 @@ function tagSearchHandler(e){
 
 function showSuggestions(tags, query){
     tags.forEach(eachTag =>{
-        let sugg = $('<li>');
+        let sugg = $('<button>');
         if(eachTag !== noResult){
             sugg.html(boldSuggestion(eachTag, query));
-            sugg.on('mouseover', () => sugg.addClass('highlight-sug'));
-            sugg.on('mouseout', () => sugg.removeClass('highlight-sug'));
-            sugg.on('click', () => addTag(eachTag));
+            sugg.addClass('btn btn-secondary');
+            sugg.on('mouseover', () => {
+                sugg.addClass('btn-success');
+                sugg.removeClass('btn-secondary');});
+            sugg.on('mouseout', () => {
+                sugg.addClass('btn-secondary');
+                sugg.removeClass('btn-success');});  
+            sugg.on('click', (e) => {
+                e.preventDefault();
+                addTag(eachTag);
+            });
         }else{
             sugg.text(noResult);
-            sugg.addClass('no-result');
+            sugg.addClass('btn btn-danger');
+            sugg.prop('disabled',true);
         };
         sugList.append(sugg);
     });
-}
+};
 
 function addTag(tag){
     if(checkTagAlreadyAdded(tag)){
