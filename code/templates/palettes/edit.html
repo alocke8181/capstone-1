@@ -30,17 +30,18 @@
 </div>
 <div class="palette-editor" id="{{palette.id}}">
         <form id="edit-form">
+            <label for="name">Name (<i id="name-counter"></i>)</label>
             <input type="text" id="name" class='form-control login-field' value="{{palette.name}}">
             <p>Max description length 200 characters. (<i id="char-counter"></i>)</p>
             <textarea id="desc" class="form-control desc-field" name="desc" rows="2">{{palette.desc}}</textarea>
-            <div id="tag-cont">
-                {% for tag in tags %}
-                    <div class="btn-group-toggle form-check-inline tag-box" data-toggle="buttons">
-                        <label class="btn btn-info">
-                            <input type="checkbox" autocomplete="off" data-name="{{tag.name}}" {% if tag in palette.tags %} checked {% endif %}>{{tag.name}}
-                        </label>
-                    </div>
+            <div id="added-tags">
+                {% for tag in palette.tags %}
+                    <button name="{{tag.name}}" id="{{tag.name}}" class="btn btn-secondary">{{tag.name}}</button>
                 {% endfor %}
+            </div>
+            <input type="text" name="tag-search" id="tag-search" placeholder="Search for Tags" class="form-control">
+            <div>
+                <ul id="suggestions"></ul>
             </div>
             <br>
         </form>
