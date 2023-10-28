@@ -114,9 +114,8 @@ function showSuggestions(tags, query){
         let sugg = $('<li>');
         if(eachTag !== noResult){
             sugg.html(boldSuggestion(eachTag, query));
-            sugg.data('tag-name', eachTag);
-            sugg.on('mouseover', () => sugg.addClass('highlight-sug'));
-            sugg.on('mouseout', () => sugg.removeClass('highlight-sug'));
+            sugg.on('mouseover', (e) => e.target.classList.add('highlight-sug'));
+            sugg.on('mouseout', (e) => e.target.classList.remove('highlight-sug'));
             sugg.on('click', () => addTag(eachTag));
         }else{
             sugg.text(noResult);
@@ -127,7 +126,38 @@ function showSuggestions(tags, query){
 }
 
 function addTag(tag){
-    console.log(tag);
+    if(checkTagAlreadyAdded(tag)){
+        return;
+    }else{
+    let newTag = $('<button>');
+    newTag.attr('name', tag);
+    newTag.attr('id', tag);
+    newTag.addClass('btn btn-secondary');
+    newTag.on('mouseover', () => {
+        newTag.addClass('btn-danger');
+        newTag.removeClass('btn-secondary');});
+    newTag.on('mouseout', () => {
+        newTag.addClass('btn-secondary');
+        newTag.removeClass('btn-danger');});    
+    newTag.text(tag);
+    newTag.on('click', (e) => {
+        e.preventDefault();
+        newTag.remove();
+    });
+    addedTags.append(newTag);
+}
+};
+
+function checkTagAlreadyAdded(tag){
+    let added = false;
+    if(addedTags.children().length >0){
+        addedTags.children().each((idx, child) =>{
+            if($(child).attr('id') == tag){
+                added = true;
+            };
+        });
+    };
+    return added;
 };
 
 function boldSuggestion(tag, query){
