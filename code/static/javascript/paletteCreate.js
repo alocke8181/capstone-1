@@ -184,10 +184,8 @@ async function savePalette(){
         let nameIn = $('#name').val();
         let descIn = $('#desc').val();
         let tags = [];
-        $('#tag-cont').find('input[type=checkbox]').each(function(){
-            if (this.checked){
-                tags.push(this.dataset.name);
-            };
+        addedTags.find('button').each((idx, child) =>{
+            tags.push($(child).attr('name'));
         });
         let response = await axios.post(`${BASE_URL}/palettes/save`, {name : nameIn, desc : descIn, colors : colors, tags : tags});
         let redirUrl = response.data.redir_url
