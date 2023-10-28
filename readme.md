@@ -66,3 +66,7 @@ This is a list of what I used to make this. Use `requirements.txt` to install al
 - SQL
 	- Postgresql
 - Git
+
+##Changelog
+- 10/28/23
+	- Improved tag adding and editing system with search functionality
