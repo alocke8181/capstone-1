@@ -1,7 +1,8 @@
-const BASE_URL = 'https://palette-place.onrender.com/';
-//const BASE_URL = 'http://127.0.0.1:5000/'
+//const BASE_URL = 'https://palette-place.onrender.com/';
+const BASE_URL = 'http://127.0.0.1:5000/'
 async function toggleFavorite(){
     let $favBut = $('#toggle-fav');
+    let $numFavs = $('#num-favs');
     $favBut.on('click', async function(){
         if ($favBut.hasClass('btn-warning')){
             let palID= $favBut.data('palid');
@@ -10,6 +11,7 @@ async function toggleFavorite(){
                 $favBut.toggleClass('btn-warning');
                 $favBut.toggleClass('btn-danger');
                 $favBut.text('Unfavorite');
+                $numFavs.text(parseInt($numFavs.text())+1);
             };
             return;
         };
@@ -20,6 +22,7 @@ async function toggleFavorite(){
                 $favBut.toggleClass('btn-warning');
                 $favBut.toggleClass('btn-danger');
                 $favBut.text('Favorite');
+                $numFavs.text(parseInt($numFavs.text())-1);
             };
             return;
         };

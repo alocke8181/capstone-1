@@ -1,5 +1,5 @@
-const BASE_URL = 'https://palette-place.onrender.com/';
-//const BASE_URL = 'http://127.0.0.1:5000/'
+//const BASE_URL = 'https://palette-place.onrender.com/';
+const BASE_URL = 'http://127.0.0.1:5000/'
 let tagList;
 const tagSearchBar = $('#tag-search');
 let sugList = $('#suggestions');
@@ -155,6 +155,8 @@ function addTag(tag){
         newTag.remove();
     });
     addedTags.append(newTag);
+    tagSearchBar.val('');
+    clearSuggestions();
 }
 };
 

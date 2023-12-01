@@ -1,5 +1,5 @@
-const BASE_URL = 'https://palette-place.onrender.com/';
-//const BASE_URL = 'http://127.0.0.1:5000/'
+//const BASE_URL = 'https://palette-place.onrender.com/';
+const BASE_URL = 'http://127.0.0.1:5000/'
 let tagList;
 const tagSearchBar = $('#tag-search');
 let sugList = $('#suggestions');
@@ -142,12 +142,12 @@ function addTag(tag){
     let newTag = $('<button>');
     newTag.attr('name', tag);
     newTag.attr('id', tag);
-    newTag.addClass('btn btn-secondary');
+    newTag.addClass('btn btn-primary');
     newTag.on('mouseover', () => {
         newTag.addClass('btn-danger');
-        newTag.removeClass('btn-secondary');});
+        newTag.removeClass('btn-primary');});
     newTag.on('mouseout', () => {
-        newTag.addClass('btn-secondary');
+        newTag.addClass('btn-primary');
         newTag.removeClass('btn-danger');});    
     newTag.text(tag);
     newTag.on('click', (e) => {
@@ -155,6 +155,8 @@ function addTag(tag){
         newTag.remove();
     });
     addedTags.append(newTag);
+    tagSearchBar.val('');
+    clearSuggestions();
 }
 };
 

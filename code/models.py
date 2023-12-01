@@ -81,6 +81,9 @@ class Palette(db.Model):
             'desc':self.desc,
             'tags':tags
         }
+    
+    def num_favs(self):
+        return len(self.favorited_by)
 
 #####################################################################################
 class Tag(db.Model):

@@ -35,7 +35,7 @@
         <div id="button-div">
             <button class="btn btn-primary" id="gen-button">Generate Palette</button>
             {% if g.user %}
-            <button class="btn btn-secondary" id="save-button">Save Palette</button>
+            <button class="btn btn-success" id="save-button">Save Palette</button>
             {% endif %}
         </div>
         <div id="field-div">
@@ -46,7 +46,7 @@
             <label>Tags</label>
             <div id="added-tags">
             </div>
-            <input type="text" name="tag-search" id="tag-search" placeholder="Search for Tags" class="form-control">
+            <input type="text" name="tag-search" id="tag-search" placeholder="Search for Tags" class="form-control" autocomplete="off">
             <div id="suggestions">
             </div>
             <br>

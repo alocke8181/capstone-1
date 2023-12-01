@@ -3,9 +3,20 @@
 
     <div id="search-div">
         <form id="search-form">
-
+            <label for="name-search">Name:</label>
+            <input type="text" id="name-input" name="pal-name" class="form-control">
+            <label for="creator-search">Creator:</label>
+            <input type="text" id="creator-search" name="pal-creator" class="form-control">
+            <label for="tag-search">Tags</label>
+            <div id="added-tags">  
+            </div>
+            <input type="text" name="tag-search" id="tag-search" class="form-control" autocomplete="off" width="20%">
+            <div id="suggestions">
+            </div>
+            <button id="search-button" class="btn btn-success">Search</button>
         </form>
     </div>
+    <hr>
     <div id="pal-div">
     </div>
     <br>

@@ -15,7 +15,7 @@
         <button id='toggle-fav' class="btn btn-warning" data-palid = "{{palette.id}}">Favorite</button>
     {% endif %}
 {% endif %}
-
+<i id="num-favs">{{palette.num_favs()}}</i>
 <div id="color-section">
     <!-- VSCode will think the inline styles will cause errors. They won't.-->
     <div id="main-color" class="color-box">
