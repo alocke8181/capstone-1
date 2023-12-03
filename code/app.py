@@ -218,9 +218,6 @@ def save_edit(palette_id):
     db.session.commit()
     return jsonify(redir_url = f'palettes/{palette.id}'),200
 
-    
-
-
 @app.route('/palettes/<int:palette_id>/delete', methods=['GET'])
 def del_palette(palette_id):
     """Delete a palette"""
@@ -265,19 +262,53 @@ def unfavorite_palette(palette_id):
 #Palette Browsing Routes
 @app.route('/palettes/browse', methods=['GET'])
 def show_browse_palettes():
-    """Return the render template"""
-    return render_template('/palettes/browse.html')
+    """Return the render template or if there are more palettes to lload"""
+    page_num = int(request.args.get('page'))
+    #if page_num < 0:
+    #    abort(404)
+    user = request.args.get('user')
+    name = request.args.get('name')
+    tags = request.args.get('tags')
+    print(page_num, user, name, tags)
+    if tags != None:
+        tags = tags.split('+')
+    palettes_all = Palette.query.order_by(Palette.date_created.desc(), Palette.name.desc()).offset(16*page_num).limit(16).all()
+    palettes_filtered = filter_palettes(palettes_all, name, user, tags)
+    if request.args.get('check') == 'True':
+        if (len(palettes_filtered) > 0):
+            return jsonify(more = True)
+        else:
+            return jsonify(more = False)
+    else:
+        return render_template('/palettes/browse.html', palettes = palettes_filtered)
 
-@app.route('/palettes/browse/load', methods=['GET'])
-def load_more_palettes():
-    """Loads 16 more palettes when accessed.
-    The 'page' of palettes to load is sent via query params."""
-    pageNum = int(request.args.get('page'))
-    palettes = Palette.query.order_by(Palette.date_created.desc(), Palette.name.desc()).offset(16*pageNum).limit(16).all()
-    pal_serialized = []
-    for palette in palettes:
-        pal_serialized.append(palette.serialize())
-    return jsonify(palettes = pal_serialized)
+def filter_palettes(palettes, name, user, tags):
+    filtered = []
+    name_filtered = []
+    user_filtered = []
+    if name != None:
+        for palette in palettes:
+            if name.lower() in palette.name.lower():
+                name_filtered.append(palette)
+    else:
+        name_filtered = palettes
+    if user != None:
+        for palette in name_filtered:
+            if user.lower() in palette.user[0].username.lower():
+                user_filtered.append(palette)
+    else:
+        user_filtered = name_filtered
+    if tags != None:
+        for palette in user_filtered:
+            valid_tags = True
+            for tag in tags:
+                if tag not in palette_tags:
+                    valid_tags = False
+            if valid_tags:
+                filtered.append(palette)
+    else:
+        filtered = name_filtered
+    return filtered
 
 #####################################################################################
 #Tag Route
@@ -396,6 +427,7 @@ def make_random_palettes(numPals):
         user.palettes.append(palette)
         db.session.add(user)
         db.session.commit()
+
 
 #####################################################################################
 #Error routes

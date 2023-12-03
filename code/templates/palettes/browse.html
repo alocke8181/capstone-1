@@ -5,8 +5,8 @@
         <form id="search-form">
             <label for="name-search">Name:</label>
             <input type="text" id="name-input" name="pal-name" class="form-control">
-            <label for="creator-search">Creator:</label>
-            <input type="text" id="creator-search" name="pal-creator" class="form-control">
+            <label for="user-search">User:</label>
+            <input type="text" id="user-search" name="pal-user" class="form-control">
             <label for="tag-search">Tags</label>
             <div id="added-tags">  
             </div>
@@ -18,14 +18,29 @@
     </div>
     <hr>
     <div id="pal-div">
+        <!-- VSCode will think the inline styles will cause errors. They won't.-->
+        {% for palette in palettes %}
+            <div class="palette-prev">
+                <div class="color-main" id="color-main" style="background-color: {{palette.main}};"></div>
+                <div class="color-small no-left-border" id="color-light-c" style="background-color: {{palette.light_c}};"></div>
+                <div class="color-small" id="color-light-a" style="background-color: {{palette.light_a}};"></div>
+                <div class="color-small" id="color-dark-c" style="background-color: {{palette.dark_c}};"></div>
+                <div class="color-small no-right-border" id="color-dark-a" style="background-color: {{palette.dark_a}};"></div>
+                <a href='/palettes/{{ palette.id }}'>
+                    <h6>{{ palette.name }}</h6>
+                </a>
+            </div>
+        {% endfor %}
     </div>
     <br>
     <div id="more-button">
-        <button id="load-but" class="btn btn-primary">See More</button>
+        <button id="prev-but" class="btn btn-primary">Previous</button>
+        <button id="next-but" class="btn btn-primary">Next</button>
     </div>
 
 {% endblock %}
 {% block scripts %}
 <script src="/static/javascript/paletteBrowse.js"></script>
+<script src="/static/javascript/tagSearch.js"></script>
 {% endblock %}
 

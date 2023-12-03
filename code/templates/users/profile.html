@@ -14,7 +14,7 @@
         <h5>Palettes</h5>
         <!-- VSCode will think the inline styles will cause errors. They won't.-->
         {% if user.palettes|length > 0 %}
-            {% for palette in user.palettes[0:8] %}
+            {% for palette in user.palettes[0:6] %}
             <div class="palette-prev">
                 <div class="color-main" id="color-main" style="background-color: {{palette.main}};"></div>
                 <div class="color-small no-left-border" id="color-light-c" style="background-color: {{palette.light_c}};"></div>
@@ -26,6 +26,7 @@
                 </a>
             </div>
             {% endfor %}
+            <p><a href="/palettes/browse?page=0&user={{user.username}}">See More From {{user.username}}</a></p>
         {% else %}
             <p>{{user.username}} hasn't made any palettes yet!</p>
         {% endif %}

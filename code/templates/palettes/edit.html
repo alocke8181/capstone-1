@@ -36,7 +36,7 @@
             <textarea id="desc" class="form-control desc-field" name="desc" rows="2">{{palette.desc}}</textarea>
             <div id="added-tags">
                 {% for tag in palette.tags %}
-                    <button name="{{tag.name}}" id="{{tag.name}}" class="btn btn-secondary">{{tag.name}}</button>
+                    <button name="{{tag.name}}" id="{{tag.name}}" class="btn btn-primary">{{tag.name}}</button>
                 {% endfor %}
             </div>
             <input type="text" name="tag-search" id="tag-search" placeholder="Search for Tags" class="form-control" autocomplete="off">
@@ -57,4 +57,5 @@
 
 {% block scripts %}
 <script src="/static/javascript/paletteEdit.js"></script>
+<script src="/static/javascript/tagSearch.js"></script>
 {% endblock %}
