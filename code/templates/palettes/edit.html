@@ -32,25 +32,25 @@
         <form id="edit-form">
             <label for="name">Name (<i id="name-counter"></i>)</label>
             <input type="text" id="name" class='form-control login-field' value="{{palette.name}}">
-            <p>Max description length 200 characters. (<i id="char-counter"></i>)</p>
+            <label for="desc">Description (<i id="desc-counter"></i>)</label>
             <textarea id="desc" class="form-control desc-field" name="desc" rows="2">{{palette.desc}}</textarea>
             <div id="added-tags">
                 {% for tag in palette.tags %}
                     <button name="{{tag.name}}" id="{{tag.name}}" class="btn btn-primary">{{tag.name}}</button>
                 {% endfor %}
             </div>
-            <input type="text" name="tag-search" id="tag-search" placeholder="Search for Tags" class="form-control" autocomplete="off">
+            <input type="text" name="tag-search" id="tag-search" placeholder="Search for Tags" class="form-control login-field" autocomplete="off">
             <div id="suggestions">
             </div>
             <br>
         </form>
-        <button id='save-button'type="submit" class="btn btn-success">Save</button>
+        <button id='confirm-button'type="submit" class="btn btn-success">Save</button>
         <a href="/palettes/{{ palette.id }}"><button class="btn btn-warning">Return</button></a>
 </div>
 <div id="del-button-cont">
     <button class="btn btn-danger" id="del-button">Delete Palette</button>
     <a href="/palettes/{{palette.id}}/delete">
-        <button class="btn btn-danger" id="confirm-button">Confirm Deletion</button>
+        <button class="btn btn-danger" id="confirm-del-button">Confirm Deletion</button>
     </a>
 </div>
 {% endblock %}
@@ -58,4 +58,5 @@
 {% block scripts %}
 <script src="/static/javascript/paletteEdit.js"></script>
 <script src="/static/javascript/tagSearch.js"></script>
+<script src="/static/javascript/checkLengths.js"></script>
 {% endblock %}

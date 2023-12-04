@@ -14,8 +14,8 @@ DEFAULT_PIC = '/static/default-user-icon.png'
 BASE_URL = 'http://colormind.io/api/'
 
 app = Flask(__name__)
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://dejacydg:9jX6UdhDmncVL2k_A935aVzdJNkwuP7h@mahmud.db.elephantsql.com/dejacydg'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///capstone1'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://dejacydg:9jX6UdhDmncVL2k_A935aVzdJNkwuP7h@mahmud.db.elephantsql.com/dejacydg'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///capstone1'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['SECRET_KEY'] = 'secret'
@@ -204,6 +204,7 @@ def edit_palette(palette_id):
 
 @app.route('/palettes/<int:palette_id>/edit', methods=['POST'])
 def save_edit(palette_id):
+    """Save the edits to a palette"""
     name = request.json['name']
     desc = request.json['desc']
     tags = request.json['tags']
@@ -262,14 +263,20 @@ def unfavorite_palette(palette_id):
 #Palette Browsing Routes
 @app.route('/palettes/browse', methods=['GET'])
 def show_browse_palettes():
-    """Return the render template or if there are more palettes to lload"""
-    page_num = int(request.args.get('page'))
-    #if page_num < 0:
-    #    abort(404)
-    user = request.args.get('user')
-    name = request.args.get('name')
+    """Return the render template or if there are more palettes to load
+    If the CHECK param is set to true it will only return true/false if there are more palettes that could be loaded"""
+    page_str = request.args.get('page')
+    page_num = 0
+    if page_str != None:
+        try:
+            page_num = int(page_str)
+        except:
+            abort(404)
+    if page_num < 0:
+        abort(404)
+    user = parse_to_string(request.args.get('user'))
+    name = parse_to_string(request.args.get('name'))
     tags = request.args.get('tags')
-    print(page_num, user, name, tags)
     if tags != None:
         tags = tags.split('+')
     palettes_all = Palette.query.order_by(Palette.date_created.desc(), Palette.name.desc()).offset(16*page_num).limit(16).all()
@@ -281,34 +288,6 @@ def show_browse_palettes():
             return jsonify(more = False)
     else:
         return render_template('/palettes/browse.html', palettes = palettes_filtered)
-
-def filter_palettes(palettes, name, user, tags):
-    filtered = []
-    name_filtered = []
-    user_filtered = []
-    if name != None:
-        for palette in palettes:
-            if name.lower() in palette.name.lower():
-                name_filtered.append(palette)
-    else:
-        name_filtered = palettes
-    if user != None:
-        for palette in name_filtered:
-            if user.lower() in palette.user[0].username.lower():
-                user_filtered.append(palette)
-    else:
-        user_filtered = name_filtered
-    if tags != None:
-        for palette in user_filtered:
-            valid_tags = True
-            for tag in tags:
-                if tag not in palette_tags:
-                    valid_tags = False
-            if valid_tags:
-                filtered.append(palette)
-    else:
-        filtered = name_filtered
-    return filtered
 
 #####################################################################################
 #Tag Route
@@ -324,8 +303,7 @@ def get_all_tags():
 #Helper functions
 def generate_tags():
     """Helper function to pre-generate all of the tags.
-    See Readme for explanaition of pre-generated tags.
-    This function only needs to be called once from iPython."""
+    See Readme for explanaition of pre-generated tags."""
 
     tag_names = ['Black','Dark Grey','Grey','Light Gray','White','Off-White','Silver',
     'Red','Brown','Maroon','Salmon','Pink','Crimson',
@@ -345,6 +323,7 @@ def generate_tags():
     db.session.commit()
 
 def setup():
+    """Only needs to be ran once from a Python console"""
     db.create_all()
     generate_tags()
 
@@ -428,6 +407,47 @@ def make_random_palettes(numPals):
         db.session.add(user)
         db.session.commit()
 
+def parse_to_string(input):
+    """In case the user searches for a number"""
+    if input != None:
+        return str(input)
+    else:
+        return None
+
+def filter_palettes(palettes, name, user, tags):
+    """Filter palettes by name, user, and tags"""
+    filtered = []
+    name_filtered = []
+    user_filtered = []
+    if name != None:
+        for palette in palettes:
+            if name.lower() in palette.name.lower():
+                name_filtered.append(palette)
+    else:
+        name_filtered = palettes
+    if user != None:
+        for palette in name_filtered:
+            if user.lower() == palette.user[0].username.lower():
+                user_filtered.append(palette)
+    else:
+        user_filtered = name_filtered
+    if tags != None:
+        for palette in user_filtered:
+            valid_tags = True
+            palette_tags = map(convertTag, palette.serialize()['tags'])
+            for tag in tags:
+                if tag not in palette_tags:
+                    valid_tags = False
+            if valid_tags:
+                filtered.append(palette)
+    else:
+        filtered = user_filtered
+    return filtered
+
+def convertTag(tag):
+    """Convert tag to snake case"""
+    converted_Name = tag.lower().replace(" ", "_")
+    return converted_Name
 
 #####################################################################################
 #Error routes
@@ -441,8 +461,3 @@ def page_not_found(e):
 def forbidden_access(e):
     "Handle 403 errors"
     return render_template('errors/403.html',error=e), 403
-
-# @app.errorhandler(500)
-# def int_server_error(e):
-#     """Handle 500 errors"""
-#     return render_template('errors/500.html',error=e), 500

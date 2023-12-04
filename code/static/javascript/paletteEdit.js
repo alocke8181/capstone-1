@@ -1,56 +1,8 @@
-//const BASE_URL = 'https://palette-place.onrender.com/';
-const BASE_URL = 'http://127.0.0.1:5000/'
 addedTags = $('#added-tags');
 
-$('#confirm-button').hide();
+$('#confirm-del-button').hide();
 $('#del-button').click(function(){
-    $('#confirm-button').show();
-});
-
-function checkLengths(){
-    let nameLen = $('#name').val().length;
-    let descLen = $('#desc').val().length;
-    if ((nameLen <= 20 && nameLen >=1) && (descLen <=200)){
-        $('#save-button').prop('disabled',false);
-    }else{
-        $('#save-button').prop('disabled',true);
-    };
-};
-checkLengths();
-
-function nameCounter(){
-    let $charCount = $('#name-counter');
-    let $inputField = $('#name');
-    let len = $inputField.val().length;
-    $charCount.text(`${len}/20`);
-    if (len > 20 || len <=0){
-        $charCount.css('color','red');
-    } if (len <=20 && len >=1){
-        $charCount.css('color','#E5EBEF');
-    }
-};
-nameCounter();
-$('#name').on('keyup', function(){
-    nameCounter();
-    checkLengths();
-});
-
-function descCounter(){
-    let $charCount = $('#desc-counter');
-    let $inputField = $('#desc');
-    let len = $inputField.val().length;
-    $charCount.text(`${len}/200`);
-    if (len > 200){
-        $charCount.css('color','red');
-    } if (len <=200 && len >=1){
-        $charCount.css('color','#E5EBEF');
-    }
-};
-
-descCounter();
-$('#desc').on('keyup', function(){
-    descCounter();
-    checkLengths();
+    $('#confirm-del-button').show();
 });
 
 async function editPalette(){
@@ -72,8 +24,8 @@ async function editPalette(){
 editPalette();
 
 function addListenersToExistingTags(){
+    //Adds listeners to tags that are already added to the palette
     let oldTags = $('.btn-primary');
-    console.log(oldTags);
     oldTags.each((eachTag) =>{
         let tag = $(oldTags[eachTag]);
         tag.on('mouseover', () => {

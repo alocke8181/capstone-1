@@ -5,6 +5,7 @@ $('#del-button').click(function(){
 });
 
 function charCounter(){
+    //Character counter for the description of a user
     let $charCount = $('#char-counter');
     let $inputField = $('textarea');
     let len = $inputField.val().length;

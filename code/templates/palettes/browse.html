@@ -4,13 +4,13 @@
     <div id="search-div">
         <form id="search-form">
             <label for="name-search">Name:</label>
-            <input type="text" id="name-input" name="pal-name" class="form-control">
+            <input type="text" id="name-search" class="form-control">
             <label for="user-search">User:</label>
-            <input type="text" id="user-search" name="pal-user" class="form-control">
+            <input type="text" id="user-search" class="form-control">
             <label for="tag-search">Tags</label>
             <div id="added-tags">  
             </div>
-            <input type="text" name="tag-search" id="tag-search" class="form-control" autocomplete="off" width="20%">
+            <input type="text" id="tag-search" class="form-control" autocomplete="off" width="20%">
             <div id="suggestions">
             </div>
             <button id="search-button" class="btn btn-success">Search</button>
@@ -40,7 +40,8 @@
 
 {% endblock %}
 {% block scripts %}
-<script src="/static/javascript/paletteBrowse.js"></script>
 <script src="/static/javascript/tagSearch.js"></script>
+<script src="/static/javascript/paletteBrowse.js"></script>
+
 {% endblock %}
 
