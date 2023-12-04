@@ -5,8 +5,8 @@ const noResult = 'No Tags Found!';
 let addedTags = $('#added-tags');
 
 //Pages that use this script do not need to define BASE_URL
-//const BASE_URL = 'https://palette-place.onrender.com/';
-const BASE_URL = 'http://127.0.0.1:5000/'
+const BASE_URL = 'https://palette-place.onrender.com/';
+//const BASE_URL = 'http://127.0.0.1:5000/'
 
 async function getTags(){
     //Gets all the tags from the TAG route
