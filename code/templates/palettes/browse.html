@@ -31,6 +31,9 @@
                 </a>
             </div>
         {% endfor %}
+        {% if palettes|length == 0 %}
+            <p>No palettes found!</p>
+        {% endif %}
     </div>
     <br>
     <div id="more-button">

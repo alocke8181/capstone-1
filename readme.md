@@ -30,8 +30,7 @@ Users who are logged in can create their own palettes. Each palette has five col
 	- Favorite `/palettes/[ID]/favorite` (GET): Adds a palette to the user's favorites. Authorization is done to make sure the client is logged in and not trying to favorite their own palette.
 	- Unfavorite `palettes/[ID]/unfavorite` (GET): Remove a palette to the user's favorites. Authorization is done to make sure the client is logged in and not trying to favorite their own palette.
 - Browsing Routes
-	- Show `/palettes/browse` (GET): Simply show the browsing page. JavaScript is used to load the palettes.
-	- Load `/palettes/browse/load` (GET): The client sends a request to the server with the specified page to load. Palettes are loaded in pages of 16 each. When the Browse page is first loaded, an initial request is sent by the client to load the first 16 palettes. A global counter keeps track of what pages have been loaded. After each load, the client sends another request to the same route, but this is only to check that the server still has palettes to send back. If there are none, the "Load More" button is disabled.
+	- Show `/palettes/browse [page, name, user, tags, check]` (GET): Allows the user to browse and search palettes. Users can search based on palette names, the user who made them, and the tags. All search parameters are sent via query parameters to the server. The `page` parameter starts at 0. The `check` param is only to be used to check if there are more palettes to load. The server will return `True/False` if there is another page of palettes that can be loaded. If it is true, the "Next" button will be displayed at the bottom of the page, and users can click it. Otherwise it will not be shown.
 - Error Routes
 	- 403: Shows a custom 403 Forbidden page. This is called when the user tries to access a page they shouldn't be able to, such as editing another user's profile.
 	- 404: Shows a custom 404 Not Found page. Many routes use `get_or_404` when querying the database. If nothing is found, this page will be shown instead.
@@ -71,3 +70,7 @@ This is a list of what I used to make this. Use `requirements.txt` to install al
 
 - 10/28/23
 	- Improved tag adding and editing system with search functionality
+- 12/4/23
+	- Users are now able to search for palettes based on name, users, and tags
+	- Minor quality of life changes on certain pages.
+	- Tag searching and checking name/description lengths are now in their own JavaScript files

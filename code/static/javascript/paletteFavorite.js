@@ -1,5 +1,5 @@
-const BASE_URL = 'https://palette-place.onrender.com/';
-//const BASE_URL = 'http://127.0.0.1:5000/'
+//const BASE_URL = 'https://palette-place.onrender.com/';
+const BASE_URL = 'http://127.0.0.1:5000/'
 
 async function toggleFavorite(){
     //Toggles the palette as a user's favorite
